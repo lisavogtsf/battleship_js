@@ -1,96 +1,120 @@
 /* Style for an implementation of Battleship */
+
+@mainColor: teal;
+@contrastColor: white;
+@borderRadiusStandard: 10px;
+
 body {
   background-color: white;
-  color: teal;
+  color: @mainColor;
   font-family: sans-serif;
   text-align: center;
   margin: 0 auto;
   height: 100%;
 }
+
 /* center everything -- overriding baked-in style of semantic tags */
+
 /* site-wide text settings */
-h1,
-h2,
+h1, 
+h2, 
 h3,
 h4,
 a {
   margin: 0 auto;
-  color: teal;
+  color: @mainColor;
 }
+
 /* make all sections full width, centered */
-header,
+
+header, 
 footer,
 #mainScreen,
 section {
   margin: 0 auto;
   width: 100%;
 }
+
 /* Setting up the screen */
+
 header {
   height: 10%;
   padding: 20px 0;
+  h1 {
+    font-size: 3.5em;
+  }
+  h2 {
+    font-style: italic;
+    font-size: 1em;
+  }
 }
-header h1 {
-  font-size: 3.5em;
-}
-header h2 {
-  font-style: italic;
-  font-size: 1em;
-}
+
 footer {
   height: 10%;
   padding: 20px 0;
+  h5 {
+    font-size: .9em;
+  }
 }
-footer h5 {
-  font-size: .9em;
-}
+
 button {
-  border-radius: 10px;
+  border-radius: @borderRadiusStandard;
   padding: 5px;
-  background-color: white;
+  background-color: @contrastColor;
 }
-:focus,
-:hover,
-:active {
+
+:focus, :hover, :active {
   outline: thin dotted;
 }
+
 /* Styling of main screen area */
+
 #mainScreen {
   height: 80%;
 }
+
+
 section.screen {
   height: 100%;
+  &.hide {
+    display: none;
+  }
+  &.show {
+    display: inline-block;
+  }
 }
-section.screen.hide {
-  display: none;
-}
-section.screen.show {
-  display: inline-block;
-}
+
+
 /* Opening/Start Screen */
 #startScreen {
-  background-color: white;
+  background-color: @contrastColor
 }
+
 /* Privacy/feedback Screen */
-#feedbackScreen {
-  background-color: teal;
+#feedbackScreen { 
+  background-color: @mainColor;
+  h1, 
+  h2, 
+  h3,
+  h4 {
+    color: @contrastColor;
+  }
 }
-#feedbackScreen h1,
-#feedbackScreen h2,
-#feedbackScreen h3,
-#feedbackScreen h4 {
-  color: white;
-}
+
 /* Active Game Screen */
 #activeScreen {
-  background-color: white;
+  background-color: @contrastColor
 }
+
+
 /*temp*/
 div {
   height: 100px;
   width: 100px;
-  background-color: teal;
+  background-color: @mainColor;
 }
+
+
 /* for somewhat smaller screens, not quite mobile phone */
 /*tablet, approx 800px wide*/
 /*and (min-width: 600px) */
@@ -109,4 +133,3 @@ div {
   }
 }
 
-/*# sourceMappingURL=style.css.map */

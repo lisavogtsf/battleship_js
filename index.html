@@ -20,16 +20,19 @@
   </header>
 
   <div id="mainScreen" role="main">
+    <!-- Start Screen -->
     <section id="startScreen" class="screen show">
       <h3>Start a new game?</h3>
-      <button>Start!</button>
+      <button id="startGame">Start!</button>
     </section>
 
+    <!-- Feedback/Privacy Screen -->
     <section id="feedbackScreen" class="screen hide">
       <h3 class="feedbackMessage"></h3>
-      <button class="feedbackButton"></button>
+      <button class="feedback"></button>
     </section>
 
+    <!-- Active Turn/Game Screen -->
     <section id="activeScreen" class="screen hide">
         
       <h5 class="currentPlayer"></h4>
@@ -44,6 +47,8 @@
       <div class="selfBoard">
         
       </div>
+      <!-- make selection -->
+      <button id="selection"></button>
     </section>  
   </div>
 

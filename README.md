@@ -6,7 +6,9 @@ an implementation of battleship in HTML/CSS/JS
 * game screens
 	* start
 	* privacy/feedback
-	* active turn  
+	* active turn 
+- mini step one: display an emptied board reflecting empty data structure
+
 * game states
 	* start
 	* prepare player 1 turn
@@ -36,6 +38,8 @@ an implementation of battleship in HTML/CSS/JS
 - more thorough accessibility/keyboard support
 - more responsive, integrate bootstrap?
 - visual design improvement pass
+- high scores
+- custom player names
 - implement as non-violent alternative game
   * guessing where the other person has connected stars to make constellations
   * make ships into words, add 'wheel of fortune' word guessing component as alternate way to claim/sink full ship/word
