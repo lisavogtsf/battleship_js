@@ -1,39 +1,98 @@
-// Style of an implementation of Battleship
-
+/* Style for an implementation of Battleship */
 body {
   background-color: white;
   color: teal;
   font-family: sans-serif;
   text-align: center;
+  margin: 0 auto;
+  height: 100%;
 }
-
+/* center everything -- overriding baked-in style of semantic tags */
+/* site-wide text settings */
+h1,
+h2,
+h3,
+h4,
+a {
+  margin: 0 auto;
+  color: teal;
+}
+/* make all sections full width, centered */
+header,
+footer,
+#mainScreen,
+section {
+  margin: 0 auto;
+  width: 100%;
+}
+/* Setting up the screen */
 header {
-  margin: 0 auto;
+  height: 10%;
+  padding: 20px 0;
 }
-
-footer {
-  margin: 0 auto;
+header h1 {
+  font-size: 3.5em;
 }
-
-main {
-    margin: 0 auto;
-}
-
-h1, h2, h3 {
-  margin: 0 auto;
+header h2 {
   font-style: italic;
+  font-size: 1em;
 }
-
+footer {
+  height: 10%;
+  padding: 20px 0;
+}
+footer h5 {
+  font-size: .9em;
+}
+button {
+  border-radius: 10px;
+  padding: 5px;
+  background-color: white;
+}
+:focus {
+  outline: thin dotted;
+}
+:hover,
+:active {
+  outline: none;
+}
+/* Styling of main screen area */
+#mainScreen {
+  height: 80%;
+}
+section.screen {
+  height: 100%;
+}
+section.screen.hide {
+  display: none;
+}
+section.screen.show {
+  display: inline-block;
+}
+/* Opening/Start Screen */
+#startScreen {
+  background-color: white;
+}
+/* Privacy/feedback Screen */
+#feedbackScreen {
+  background-color: teal;
+}
+#feedbackScreen h1,
+#feedbackScreen h2,
+#feedbackScreen h3,
+#feedbackScreen h4 {
+  color: white;
+}
+/* Active Game Screen */
+#activeScreen {
+  background-color: white;
+}
 /*temp*/
 div {
   height: 100px;
   width: 100px;
   background-color: teal;
 }
-
-
-/* 
-
 /* for somewhat smaller screens, not quite mobile phone */
 /*tablet, approx 800px wide*/
 /*and (min-width: 600px) */
@@ -51,3 +110,5 @@ div {
     /*background-color: teal;*/
   }
 }
+
+/*# sourceMappingURL=style.css.map */

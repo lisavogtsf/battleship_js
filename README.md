@@ -18,7 +18,7 @@ an implementation of battleship in HTML/CSS/JS
 - grid: 2 x 2
 - single ship: 2 squares long
 - hard-coded ship placement
-- token accessibility, ARIA roles for document structure
+- token accessibility, ARIA roles for document structure/semantic tags
 - token responsive, 1 @media rule
 - basic white/teal color scheme and text elements
 

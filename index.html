@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="description" content="based on the classic game of 'Battleship' https://en.wikipedia.org/wiki/Battleship_(game)">
+  <meta name="viewport" content="width=device-width, initial-scale=1, height=device-height">
+
   <title>Battleship</title>
-  <!-- based on the classic game of 'Battleship' https://en.wikipedia.org/wiki/Battleship_(game) -->
+
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -13,22 +16,24 @@
 
   <header role="banner">
       <h1>Battleship</h1>
-      <h2>"You sank my battleship!"</h2>
+      <h2 class="topMessage">"You sank my battleship!"</h2>
   </header>
 
   <div id="mainScreen" role="main">
-    <section id="startScreen" class="panel">
-      
+    <section id="startScreen" class="screen show">
+      <h3>Start a new game?</h3>
+      <button>Start!</button>
     </section>
 
-    <section id="privacyScreen" class="panel">
-      
+    <section id="feedbackScreen" class="screen hide">
+      <h3 class="feedbackMessage"></h3>
+      <button class="feedbackButton"></button>
     </section>
 
-    <section id="gridScreen" class="panel">
+    <section id="activeScreen" class="screen hide">
         
-      <h3 class="currentPlayer"></h3>
-      <h3 class="currentInstructions"></h3>
+      <h5 class="currentPlayer"></h4>
+      <h4 class="currentInstructions"></h4>
 
       <!-- displays rival board for new target selection -->
       <div class="rivalBoard">
@@ -39,12 +44,13 @@
       <div class="selfBoard">
         
       </div>
-      </section>  
-    </div>
+    </section>  
+  </div>
 
   <footer role="contentinfo">
     <!-- startover option -->
-    <h4><a href="https://en.wikipedia.org/wiki/Battleship_(game)">Learn more about Battleship</a></h4>
+    <h5><a href="https://en.wikipedia.org/wiki/Battleship_(game)">Learn more about Battleship</a></h5>
+    <h5><a href="https://github.com/lisavogtsf/">by Lisa Vogt</a></h5><h5><a href="https://github.com/lisavogtsf/battleship_js">battleship_js</a></h5>
   </footer>
 
 </body>
