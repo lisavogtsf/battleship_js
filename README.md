@@ -1,8 +1,6 @@
 # battleship_js
 an implementation of battleship in HTML/CSS/JS
 
-___
-
 # Test Mode
 
 * game screens
@@ -24,8 +22,6 @@ ___
 - token responsive, 1 @media rule
 - basic white/teal color scheme and text elements
 
----
-
 # MVP
 - simple app structure:
  	* index.html
@@ -34,8 +30,6 @@ ___
 - grid: 10 x 10
 - ships: 5, lengths: [2, 3, 3, 4, 5]
 - random ship placement
-
----
 
 # Wish list
 
