@@ -44,13 +44,13 @@ footer {
 footer h5 {
   font-size: .9em;
 }
-button {
+button,
+input.targetButton {
   border-radius: 10px;
   padding: 5px;
   background-color: white;
 }
 :focus,
-:hover,
 :active {
   outline: thin dotted;
 }
@@ -60,12 +60,19 @@ button {
 }
 section.screen {
   height: 100%;
+  min-height: 250px;
 }
 section.screen.hide {
   display: none;
 }
 section.screen.show {
   display: inline-block;
+}
+h3 {
+  padding: 20px 0;
+}
+button {
+  margin: 5px 0;
 }
 /* Opening/Start Screen */
 #startScreen {
@@ -85,11 +92,19 @@ section.screen.show {
 #activeScreen {
   background-color: white;
 }
-/*temp*/
-div {
+#activeScreen .grid {
+  color: white;
+  display: inline-block;
+}
+#activeScreen .grid div {
+  float: left;
+  background-color: teal;
   height: 100px;
   width: 100px;
-  background-color: teal;
+}
+#activeScreen .grid .cell {
+  background-color: slateblue;
+  border: white dotted medium;
 }
 /* for somewhat smaller screens, not quite mobile phone */
 /*tablet, approx 800px wide*/

@@ -3,6 +3,8 @@
 @mainColor: teal;
 @contrastColor: white;
 @borderRadiusStandard: 10px;
+@player1color: slateblue;
+@player2color: darkred;
 
 body {
   background-color: white;
@@ -57,13 +59,14 @@ footer {
   }
 }
 
-button {
+button,
+input.targetButton {
   border-radius: @borderRadiusStandard;
   padding: 5px;
   background-color: @contrastColor;
 }
 
-:focus, :hover, :active {
+:focus, :active {
   outline: thin dotted;
 }
 
@@ -73,9 +76,9 @@ button {
   height: 80%;
 }
 
-
 section.screen {
   height: 100%;
+  min-height: 250px;
   &.hide {
     display: none;
   }
@@ -84,6 +87,12 @@ section.screen {
   }
 }
 
+h3 {
+  padding: 20px 0;
+}
+button {
+  margin: 5px 0;
+}
 
 /* Opening/Start Screen */
 #startScreen {
@@ -103,17 +112,24 @@ section.screen {
 
 /* Active Game Screen */
 #activeScreen {
-  background-color: @contrastColor
+  background-color: @contrastColor;
+
+  .grid {
+    color: @contrastColor;
+    display: inline-block;
+    div {
+      float: left;
+      background-color: @mainColor;
+      height: 100px;
+      width: 100px;
+    }
+    .cell {
+      background-color: @player1color;
+      border: white dotted medium;
+    }
+  }
+
 }
-
-
-/*temp*/
-div {
-  height: 100px;
-  width: 100px;
-  background-color: @mainColor;
-}
-
 
 /* for somewhat smaller screens, not quite mobile phone */
 /*tablet, approx 800px wide*/

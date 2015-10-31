@@ -5,7 +5,7 @@
   <meta name="description" content="based on the classic game of 'Battleship' https://en.wikipedia.org/wiki/Battleship_(game)">
   <meta name="viewport" content="width=device-width, initial-scale=1, height=device-height">
 
-  <title>Battleship</title>
+  <title></title>
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -15,40 +15,59 @@
 <body>
 
   <header role="banner">
-      <h1>Battleship</h1>
+      <h1 id="headline"></h1>
       <h2 class="topMessage">"You sank my battleship!"</h2>
   </header>
 
   <div id="mainScreen" role="main">
     <!-- Start Screen -->
-    <section id="startScreen" class="screen show">
+    <section id="startScreen" class="screen">
       <h3>Start a new game?</h3>
-      <button id="startGame">Start!</button>
+      <button id="startGame" tabindex="0">Start!</button>
     </section>
 
     <!-- Feedback/Privacy Screen -->
-    <section id="feedbackScreen" class="screen hide">
+    <section id="feedbackScreen" class="screen">
       <h3 class="feedbackMessage"></h3>
-      <button class="feedback"></button>
+      <button id="feedback" tabindex="0" class="feedbackButtonMessage">Ready!</button>
     </section>
 
     <!-- Active Turn/Game Screen -->
-    <section id="activeScreen" class="screen hide">
+    <section id="activeScreen" class="screen">
         
-      <h5 class="currentPlayer"></h4>
+      <h4 class="currentPlayer">CURRENT_PLAYER_NAME</h4>
       <h4 class="currentInstructions"></h4>
 
       <!-- displays rival board for new target selection -->
-      <div class="rivalBoard">
-        
+      <div class="rivalBoard grid">
+        <div class="columnHeaders">
+          <div class="space"></div>
+          <div class="column1 column">1</div>
+          <div class="column2 column">2</div>
+        </div>
+        <div class="row1 row">
+          <div class="rowHeader row1 row">A</div>
+          <div class="cell">0</div>
+          <div class="cell">0</div>
+        </div>
+        <div class="row2 row">
+          <div class="rowHeader row2 row">B</div>
+          <div class="cell">0</div>
+          <div class="cell">0</div>
+        </div>
       </div>
 
+      <br>
       <!-- displays own board to show own ships and assess selections by rival -->
       <div class="selfBoard">
         
       </div>
       <!-- make selection -->
-      <button id="selection"></button>
+      <form id="selection">
+        <label for="gridSelection">Type your selection here (Column Letter, Row Number)</label>
+        <input type="text" id="gridSelection" name="gridSelection" tabindex="0" autofocus placeholder="X0"></input>   
+        <input type="submit" class="targetButton" value="Select Target">
+      </form>
     </section>  
   </div>
 
