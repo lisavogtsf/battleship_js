@@ -42,4 +42,7 @@ ___
 - more thorough accessibility/keyboard support
 - more responsive, integrate bootstrap?
 - visual design improvement pass
-
+- implement as non-violent alternative game
+  * guessing where the other person has connected stars to make constellations
+  * make ships into words, add 'wheel of fortune' word guessing component as alternate way to claim/sink full ship/word
+  * nefarious hacking version, guess the other person's android swipe/password combinations
