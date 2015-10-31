@@ -1,18 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8">
   <title>Battleship</title>
   <!-- based on the classic game of 'Battleship' https://en.wikipedia.org/wiki/Battleship_(game) -->
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script type="text/javascript" src="script.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
-  <h1>Battleship</h1>
-  <h2>You sank my battleship!</h2>
 
+  <header role="banner">
+      <h1>Battleship</h1>
+      <h2>"You sank my battleship!"</h2>
+  </header>
 
+  <div id="mainScreen" role="main">
+    <section id="startScreen" class="panel">
+      
+    </section>
+
+    <section id="privacyScreen" class="panel">
+      
+    </section>
+
+    <section id="gridScreen" class="panel">
+        
+      <h3 class="currentPlayer"></h3>
+      <h3 class="currentInstructions"></h3>
+
+      <!-- displays rival board for new target selection -->
+      <div class="rivalBoard">
+        
+      </div>
+
+      <!-- displays own board to show own ships and assess selections by rival -->
+      <div class="selfBoard">
+        
+      </div>
+      </section>  
+    </div>
+
+  <footer role="contentinfo">
+    <!-- startover option -->
+    <h4><a href="https://en.wikipedia.org/wiki/Battleship_(game)">Learn more about Battleship</a></h4>
+  </footer>
 
 </body>
 </html>

@@ -4,4 +4,50 @@ body {
   background-color: white;
   color: teal;
   font-family: sans-serif;
+  text-align: center;
+}
+
+header {
+  margin: 0 auto;
+}
+
+footer {
+  margin: 0 auto;
+}
+
+main {
+    margin: 0 auto;
+}
+
+h1, h2, h3 {
+  margin: 0 auto;
+  font-style: italic;
+}
+
+/*temp*/
+div {
+  height: 100px;
+  width: 100px;
+  background-color: teal;
+}
+
+
+/* 
+
+/* for somewhat smaller screens, not quite mobile phone */
+/*tablet, approx 800px wide*/
+/*and (min-width: 600px) */
+@media all and (min-width: 600px) and (max-width: 1023px) {
+  div.home {
+    /*TODO /lv change to proper color, currently only a marker*/
+    /*background-color: teal;*/
+  }
+  div.about {
+    /*TODO /lv change to proper color, currently only a marker*/
+    /*background-color: teal;*/
+  }
+  div#contact {
+    /*TODO /lv change to proper color, currently only a marker*/
+    /*background-color: teal;*/
+  }
 }
