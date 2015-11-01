@@ -37,36 +37,94 @@
         
       <h4 class="currentPlayer"></h4>
       <h4 class="currentInstructions"></h4>
+    </section>
 
-      <!-- displays rival board for new target selection -->
-      <div class="rivalBoard gameGrid">
-        <ul>
-          <li class="heading origin"></li>
-          <li class="heading">A</li>
-          <li class="heading">B</li>
-        </ul>
-        <ul>
-          <li class="heading">1</li>
-          <li class="A1 cell"></li>
-          <li class="B1 cell"></li>
-        </ul>
-        <ul>
-          <li class="heading">2</li>
-          <li class="A2 cell"></li>
-          <li class="B2 cell"></li>
-        </ul>
-      </div>
+    <!-- Game boards -->
+    <section id="gameStage">
+      <!-- player One boards -->
+      <article class="playerOne gameSpace">
+        <!-- displays own secret board with visible targets & results -->
+        <div class="secretGrid gameGrid">
+          <h3>Player One Secret</h3>
+          <ul>
+            <li class="heading origin"></li>
+            <li class="heading column">A</li>
+            <li class="heading column">B</li>
+          </ul>
+          <ul>
+            <li class="heading row">1</li>
+            <li class="A1 cell"></li>
+            <li class="B1 cell"></li>
+          </ul>
+          <ul>
+            <li class="heading row">2</li>
+            <li class="A2 cell"></li>
+            <li class="B2 cell"></li>
+          </ul>
+        </div>
+        <!-- displays rival board for new target selection -->
+        <div class="rivalGrid gameGrid">
+          <h3>Active</h3>
+          <ul>
+            <li class="heading origin"></li>
+            <li class="heading column">A</li>
+            <li class="heading column">B</li>
+          </ul>
+          <ul>
+            <li class="heading row">1</li>
+            <li class="A1 cell"></li>
+            <li class="B1 cell"></li>
+          </ul>
+          <ul>
+            <li class="heading row">2</li>
+            <li class="A2 cell"></li>
+            <li class="B2 cell"></li>
+          </ul>
+        </div>        
+      </article>
 
-      <!-- displays own board to show own ships and assess selections by rival -->
-      <!-- <div class="selfBoard">   -->
-      <!-- </div> -->
+      <!-- player Two boards -->
+      <article class="playerTwo gameSpace">
+        <!-- displays own secret board with visible targets & results -->
+        <div class="secretGrid gameGrid">
+          <h3>Player Two Secret</h3>
+          <ul>
+            <li class="heading origin"></li>
+            <li class="heading column">A</li>
+            <li class="heading column">B</li>
+          </ul>
+          <ul>
+            <li class="heading row">1</li>
+            <li class="A1 cell"></li>
+            <li class="B1 cell"></li>
+          </ul>
+          <ul>
+            <li class="heading row">2</li>
+            <li class="A2 cell"></li>
+            <li class="B2 cell"></li>
+          </ul>
+        </div>
+        <!-- displays rival board for new target selection -->
+        <div class="rivalGrid gameGrid">
+          <h3>Active</h3>
+          <ul>
+            <li class="heading origin"></li>
+            <li class="heading column">A</li>
+            <li class="heading column">B</li>
+          </ul>
+          <ul>
+            <li class="heading row">1</li>
+            <li class="A1 cell"></li>
+            <li class="B1 cell"></li>
+          </ul>
+          <ul>
+            <li class="heading row">2</li>
+            <li class="A2 cell"></li>
+            <li class="B2 cell"></li>
+          </ul>
+        </div>        
+      </article>
 
-      <!-- make selection -->
-      <!-- <form id="selection"> -->
-        <!-- <label for="gridSelection">Type your selection here (Column Letter, Row Number)</label> -->
-        <!-- <input type="text" id="gridSelection" name="gridSelection" tabindex="0" autofocus placeholder="X0"></input>    -->
-        <!-- <input type="submit" class="targetButton" value="Select Target"> -->
-      <!-- </form> -->
     </section>  
   </div>
 

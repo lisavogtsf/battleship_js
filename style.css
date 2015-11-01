@@ -50,8 +50,7 @@ input.targetButton {
   padding: 5px;
   background-color: white;
 }
-:focus,
-:active {
+:focus {
   outline: thin dotted;
 }
 /* Styling of main screen area */
@@ -60,7 +59,7 @@ input.targetButton {
 }
 section.screen {
   height: 100%;
-  min-height: 250px;
+  min-height: 100px;
 }
 section.screen.hide {
   display: none;
@@ -92,28 +91,65 @@ button {
 #activeScreen {
   background-color: white;
 }
-#activeScreen .gameGrid {
+/* Game Grid Style, can appear on active or feedback */
+section#gameStage .gameGrid {
   display: inline-block;
-  font-size: 2.5em;
-  line-height: 2.5em;
   text-align: center;
   vertical-align: middle;
   color: white;
 }
-#activeScreen .gameGrid li {
+section#gameStage .gameGrid ul {
+  margin-top: 0;
+}
+section#gameStage .gameGrid li {
   display: inline-block;
-  /*display: inline;*/
   float: left;
+  border: white dotted 2px;
   background-color: teal;
+}
+section#gameStage .gameGrid li.cell:focus,
+section#gameStage .gameGrid li.cell:active {
+  outline: thin dotted;
+}
+section#gameStage .gameGrid li.hit {
+  content: 'X';
+  background-color: darkred;
+}
+section#gameStage .gameGrid li.miss {
+  content: '0';
+  background-color: gray;
+}
+section#gameStage .gameGrid.secretGrid {
+  font-size: 1.5em;
+  line-height: 2em;
+}
+section#gameStage .gameGrid.secretGrid li {
+  height: 48px;
+  width: 48px;
+}
+section#gameStage .gameGrid.secretGrid li.heading {
+  background-color: darkslategrey;
+}
+section#gameStage .gameGrid.rivalGrid {
+  font-size: 2.5em;
+}
+section#gameStage .gameGrid.rivalGrid h3 {
+  line-height: 1em;
+}
+section#gameStage .gameGrid.rivalGrid li {
+  line-height: 2.5em;
   height: 98px;
   width: 98px;
-  border: white dotted 2px;
 }
-#activeScreen .gameGrid li.heading {
+section#gameStage .gameGrid.rivalGrid li.heading {
   background-color: slateblue;
 }
-#activeScreen .gameGrid li .origin {
-  background-color: white;
+section#gameStage .gameGrid.rivalGrid li.cell {
+  cursor: pointer;
+}
+section#gameStage .gameGrid.rivalGrid li.cell.hit,
+section#gameStage .gameGrid.rivalGrid li.cell.miss {
+  pointer-events: none;
 }
 /* for somewhat smaller screens, not quite mobile phone */
 /*tablet, approx 800px wide*/

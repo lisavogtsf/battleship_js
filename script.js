@@ -1,5 +1,20 @@
 // Javascript including jQuery for an implementation of Battleship
 
+/**
+ * List of game functions:
+ * setOpening ()
+ * feedback (state, gameOver)
+ * init ()
+ * startActiveTurn()
+ * reset ()
+ *
+ * event handlers:
+ * startGameButton.onclick
+ * feedbackButton.onclick
+ * processTargetSelection () 
+ */
+
+
 $(document).ready(function () {
 
     /**
@@ -28,6 +43,7 @@ $(document).ready(function () {
     // -- players
     var numberOfPlayers = 2;
     var playerTitles = ['Player 1', 'Player 2'];
+    var playerClasses = ['.playerOne', '.playerTwo'];
 
     // -- grids, declare them
     var gameGrids = []; // {3D array or array of grids} all player grids in game
@@ -41,17 +57,19 @@ $(document).ready(function () {
     var columnHeaders = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
     var rowHeaders = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
-    // -- game states
-    var gameOver;
-    var currentPlayer;
-    // var activeGame = false;
-    var winner;
-    var lastMove;
+    // -- game state information
+    var currentPlayer,
+        activeGame,
+        lastMove,
+        lastTargetComplete,
+        allTargetsComplete,
+        gameOver,
+        winner;
 
     // -- strings, initial settings
     var strings = {
         GAME_NAME: "Friendship",
-        SANK_BATTLESHIP: "You sank my Battleship!",
+        SANK_BATTLESHIP: "\"You sank my Battleship!\"",
         FIRST_TURN_MSG: "Ready Player One",
         READY_BUTTON: "Ready!",
         START_ANOTHER_GAME: "Thank you for playing! Want to play again?",
@@ -61,7 +79,7 @@ $(document).ready(function () {
         GAME_OVER_TOP: "Congratulations to the Winner!",
         GAME_OVER_MSG: " Won the Game!",
         RESTART_BUTTON: "Restart",
-        SELECT_TARGET: "Select your target using the keyboard",
+        SELECT_TARGET: "Select your target by clicking on that cell",
         SELECT_TARGET_BUTTON: "Select",
     };
 
@@ -72,7 +90,6 @@ $(document).ready(function () {
     // -- buttons
     var startGameButton = document.getElementById('startGame');
     var feedbackButton = document.getElementById('feedback');
-    var cells = document.getElementsByClassName('cell');
 
     /**
      * Set up the game at the very beginning
@@ -80,21 +97,25 @@ $(document).ready(function () {
      */
 
     function setOpening () {
-        console.log("an implementation of Battleship");
+        console.log("an implementation of Battleship--setOpeneing");
 
         // no active game yet
         // gameOver = true;
 
         // -- set opening text
         $("title").text(strings.GAME_NAME);
-        var $headline = $("#headline");
-        $headline.text(strings.GAME_NAME);
+        $("#headline").text(strings.GAME_NAME);
 
-        // -- show proper screens
+        // -- show proper sections
         $("#startScreen").show();
         $("#feedbackScreen").hide();
         $("#activeScreen").hide();
         $("footer").show();
+
+        // -- show proper boards
+        $("#gameStage").hide();
+        $(playerClasses[0]).hide();
+        $(playerClasses[1]).hide();
     }
     setOpening();
 
@@ -107,19 +128,17 @@ $(document).ready(function () {
      */
 
     function feedback (state, gameOver) {
-        console.log("FEEDBACK state: ", state);
-        console.log("feedback start gameOver:", gameGrids);
+        console.log("--feedback, state:", state);
 
         // process previous move if there was one
         // check if game is over
+        //********** NEED TO REACT TO LASTMOVE, LAST TARGET COMPLETE, ALL TARGETS COMPLETE
 
         // get text field variables
+        var $headline = $("#headline");
         var $topMessage = $(".topMessage");
         var $feedbackMessage = $("h3.feedbackMessage");
         var $feedbackButtonMessage = $("button.feedbackButtonMessage");
-
-
-        console.log("setting messages");
         
         // set up message text according to state
         if (state === "readyPlayerOne") {
@@ -167,35 +186,21 @@ $(document).ready(function () {
      * Starts a new game from the start page
      */
     function init (){
+        console.log("--init, gameOver:", gameOver);
+        
         // game is no longer over, has begun
         gameOver = false;
         currentPlayer = 0;
 
-        console.log("initializing a new game state, gameOver:", gameOver);
+        // each player gets a set of targets 
 
-        // each player gets an empty grid 
-        gameGrids = []; // i grids
-        for (var i = 0; i < numberOfPlayers; i++) {
-            playerGrid = []; // j rows
-            for (var j = 0; j < rows; j++) {
-                gridRow = []; // k cells
-                for (var k = 0; k < rows; k++) {
-                    gridCell.coords = columnHeaders[j] + rowHeaders[k]; 
-                    gridRow.push(gridCell);
-                }
-                playerGrid.push(gridRow);
-            }
-            gameGrids.push(playerGrid);
-        }
-        console.log("setting up new game boards for yourself and your rival");
 
-        // set up empty board divs
-        // TODO make dynamic
-
-        // make cells listen for clicks
-        for (var i = 0; i < cells.length; i++) {
-            cells[i].onclick = selectCell(cells[i].className);
-        }
+        // make cells listen for clicks, pass on coordinate
+        $(".rivalGrid .cell").click(function(){
+            console.log("processTargetSelection", processTargetSelection);
+            console.log("this.className[0]", this.className[0]);
+            processTargetSelection(this, this.className[0], this.className[1]);
+        });
 
         // set targets
         // TODO make random
@@ -206,7 +211,6 @@ $(document).ready(function () {
         }
 
         // show next screen, Ready Player One
-        console.error("init end gameOver", gameOver);
         feedback("readyPlayerOne", gameOver);
     }
 
@@ -214,78 +218,45 @@ $(document).ready(function () {
      * start one or the other player's turn
      */
     function startActiveTurn () {
-        console.log("ACTIVE gameOver", gameOver);
 
-        // render board with updates
-        playerGrid = gameGrids[currentPlayer];
-        var cellByCoords;
-
-        // stacking the deck
-        playerGrid[0][0].targetPresent = true;
-        playerGrid[0][0].hasBeenTarget = true;
-        playerGrid[0][1].targetPresent = true;
-        playerGrid[1][0].targetPresent = false;
-        playerGrid[1][1].targetPresent = false;
-
-        for (var j = 0; j < rows; j++) {
-            for (var k = 0; k < rows; k++) {
-                cellByCoords = playerGrid[j][k];
-                if (cellByCoords.targetPresent && cellByCoords.hasBeenTarget) {
-                    //
-                }
-            }
-        }
-
-        // var $gridRows = $('.rivalBoard.grid').children();
-
-        // var cells = [];
-        // // skip row/column headers
-
-        // for (var j = 1; j < $gridRows.length; j++) {
-        //     cells = $gridRows[j].children();
-        //     console.log("cells", cells);
-        //     for (var k = 1; k < cells.length; k++) {
-        //         console.log("cells[k]", cells[k]);
-        //     }
-        // }
-
-        // update messages
+        // -- update messages
         $('.topMessage').text(strings.SANK_BATTLESHIP);        
         $('.currentInstructions').text(strings.SELECT_TARGET);        
         $('.feedbackButtonMessage').text(strings.SELECT_TARGET_BUTTON);
         $('.currentPlayer').text(playerTitles[currentPlayer]);
 
         // hide feedback screen, start for good measure
-        // show active scree
+        // -- show active screens
         $("#startScreen").hide();
         $("#feedbackScreen").hide();
-        $("footer").hide();
         $("#activeScreen").show();
+        $("#gameStage").show();
+
+        // -- show active boards
+        $(playerClasses[currentPlayer]).show();
+        $(playerClasses[!currentPlayer]).hide();
 
         // wait on user click
     }
-
 
     /**
      * Returns you to the start page from game over
      */
     function reset () {
-        console.log("resetting game, taking us out of an active game state");
-        console.log("ready for user to start a game");
+        console.log("resetting game --reset");
         setOpening();
         $(".topMessage").text(strings.START_ANOTHER_GAME);
-
     }
 
 
-    /** Handle input from user **/
+    /** Handle input from user, buttons, clicks **/
 
     /**
      * Begin game actions from startScreen
      * @param {event} - click event
      */
     startGameButton.onclick = function (event) {
-        console.log("startGameButton..., gameOver", gameOver);
+        console.log("--startGameButton, event", event);
         event.preventDefault();
         init();
     };
@@ -296,14 +267,13 @@ $(document).ready(function () {
      * @param {event} - click event
      */
     feedbackButton.onclick = function (event) {
-        console.log("gameGrids", gameGrids);
-        console.error("feedbackButton... display start screen or active turn screen, gameOver: ", gameOver);
+        console.log("--feedbackButton, event:", event);
         event.preventDefault();
 
         // time to go back to the start
         if (gameOver) {
             // was just showing the game over screen
-            console.log("detecting game over, gameOver: ", gameOver);
+            console.log("in feedbackButton detecting game over, gameOver: ", gameOver);
             reset();
         }
         // time to continue the game!
@@ -313,18 +283,43 @@ $(document).ready(function () {
     /**
      * Make selection on active game screen
      * display other player's privacy before turn, or game over 
-     * not actually a button
-     * @param {string} cellClass - class of element that was clicked
+     * not actually a button, function run on clicking rivalGrid cell
+     * @param {object} element - clicked element
+     * @param {string} col - column coordinate
+     * @param {string} row - row coordinate
      */
-    function selectCell (cellClass) {
-        console.log("selection submission ...");
-        event.preventDefault();
-        var results; 
+    function processTargetSelection (element, col, row) {
+        console.log("--processTargetSelection");
+        console.log("element, col, row", element, col, row);
 
-        // get user input
-        // TODO error protection, valid characters etc
-        // var selection = '';
-        // selection = $("#gridSelection").val()
+        var results; 
+        // TODO error handling to ensure we're inbounds
+
+        // Is it a hit or a miss?
+        // compare col/row to col/row of remaining targets
+
+        // -- check if this was a hit or miss
+            // -- if a target is at that col/row, 
+            // mark as hit on target
+            // add class 'hit' to cell
+            // set lastMove variable to 'hit'
+            // -- check whether this completes the target 'sinks it'
+                // --if completes
+                // set lastTargetComplete variable to 'true'
+                // -- allTargetsComplete? 'sunk'
+                    // -- if yes set allTargetsComplete to true
+                    // -- else set allTargetsComplete to false
+
+                // -- if doesn't complete
+                // set lastTargetComplete variable to 'false'
+
+            // -- if it is a miss
+            // add class 'miss' to cell
+            // set lastMove variable to 'miss'
+            // set lastTargetComplete variable to 'false'
+
+        // -- pass lastMove, lastTargetComplete, allTargetsComplete variables to 'feedback'
+        // don't really pass them, but that idea
         
         // process turn and deliver that info to feedback
         // check/set gameOver
@@ -336,6 +331,8 @@ $(document).ready(function () {
         if (gameOver) {
             results = "gameover";
         } else {
+            // advance turn
+            currentPlayer = players
             results = "nextPlayer"
         }
 

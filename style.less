@@ -3,8 +3,12 @@
 @mainColor: teal;
 @contrastColor: white;
 @borderRadiusStandard: 10px;
-@player1color: slateblue;
-@player2color: darkred;
+@secretColor: darkslategrey;
+@rivalColor: slateblue;
+@hitColor: darkred;
+@missColor: gray;
+@hitText: 'X';
+@missText: '0';
 
 body {
   background-color: white;
@@ -66,7 +70,7 @@ input.targetButton {
   background-color: @contrastColor;
 }
 
-:focus, :active {
+:focus {
   outline: thin dotted;
 }
 
@@ -78,7 +82,7 @@ input.targetButton {
 
 section.screen {
   height: 100%;
-  min-height: 250px;
+  min-height: 100px;
   &.hide {
     display: none;
   }
@@ -113,32 +117,74 @@ button {
 /* Active Game Screen */
 #activeScreen {
   background-color: @contrastColor;
+}
+
+/* Game Grid Style, can appear on active or feedback */
+section#gameStage {
 
   .gameGrid {
     display: inline-block;
-    font-size: 2.5em;
-    line-height: 2.5em;
     text-align: center;
     vertical-align: middle;
     color: @contrastColor;
 
+    ul {
+      margin-top: 0;
+    }
+
     li {
       display: inline-block;
-      /*display: inline;*/
       float: left;
-      background-color: @mainColor;
-      height: 98px;
-      width: 98px;
       border: white dotted 2px;
-      &.heading {
-        background-color: @player1color;
+      background-color: @mainColor;
+      &.cell:focus,
+      &.cell:active {
+        outline: thin dotted;
       }
-      .origin {
-        background-color: @contrastColor;
+      &.hit {
+        content: @hitText;
+        background-color: @hitColor;
+      }
+      &.miss {
+        content: @missText;
+        background-color: @missColor;
+      }
+    }
+
+    &.secretGrid {
+      font-size: 1.5em;
+      line-height: 2em;
+      li {
+        height: 48px;
+        width: 48px;
+        &.heading {
+          background-color: @secretColor;
+        }
+      }  
+    }
+
+    &.rivalGrid {
+      font-size: 2.5em;
+      h3 {
+        line-height: 1em
+      }
+      li {
+        line-height: 2.5em;
+        height: 98px;
+        width: 98px;
+        &.heading {
+          background-color: @rivalColor;
+        }
+        &.cell {
+          cursor: pointer;
+          &.hit,
+          &.miss {
+            pointer-events: none;
+          }
+        }
       }
     }
   }
-
 }
 
 /* for somewhat smaller screens, not quite mobile phone */
