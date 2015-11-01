@@ -114,18 +114,28 @@ button {
 #activeScreen {
   background-color: @contrastColor;
 
-  .grid {
-    color: @contrastColor;
+  .gameGrid {
     display: inline-block;
-    div {
+    font-size: 2.5em;
+    line-height: 2.5em;
+    text-align: center;
+    vertical-align: middle;
+    color: @contrastColor;
+
+    li {
+      display: inline-block;
+      /*display: inline;*/
       float: left;
       background-color: @mainColor;
-      height: 100px;
-      width: 100px;
-    }
-    .cell {
-      background-color: @player1color;
-      border: white dotted medium;
+      height: 98px;
+      width: 98px;
+      border: white dotted 2px;
+      &.heading {
+        background-color: @player1color;
+      }
+      .origin {
+        background-color: @contrastColor;
+      }
     }
   }
 

@@ -35,39 +35,38 @@
     <!-- Active Turn/Game Screen -->
     <section id="activeScreen" class="screen">
         
-      <h4 class="currentPlayer">CURRENT_PLAYER_NAME</h4>
+      <h4 class="currentPlayer"></h4>
       <h4 class="currentInstructions"></h4>
 
       <!-- displays rival board for new target selection -->
-      <div class="rivalBoard grid">
-        <div class="columnHeaders">
-          <div class="space"></div>
-          <div class="column1 column">1</div>
-          <div class="column2 column">2</div>
-        </div>
-        <div class="row1 row">
-          <div class="rowHeader row1 row">A</div>
-          <div class="cell">0</div>
-          <div class="cell">0</div>
-        </div>
-        <div class="row2 row">
-          <div class="rowHeader row2 row">B</div>
-          <div class="cell">0</div>
-          <div class="cell">0</div>
-        </div>
+      <div class="rivalBoard gameGrid">
+        <ul>
+          <li class="heading origin"></li>
+          <li class="heading">A</li>
+          <li class="heading">B</li>
+        </ul>
+        <ul>
+          <li class="heading">1</li>
+          <li class="A1 cell"></li>
+          <li class="B1 cell"></li>
+        </ul>
+        <ul>
+          <li class="heading">2</li>
+          <li class="A2 cell"></li>
+          <li class="B2 cell"></li>
+        </ul>
       </div>
 
-      <br>
       <!-- displays own board to show own ships and assess selections by rival -->
-      <div class="selfBoard">
-        
-      </div>
+      <!-- <div class="selfBoard">   -->
+      <!-- </div> -->
+
       <!-- make selection -->
-      <form id="selection">
-        <label for="gridSelection">Type your selection here (Column Letter, Row Number)</label>
-        <input type="text" id="gridSelection" name="gridSelection" tabindex="0" autofocus placeholder="X0"></input>   
-        <input type="submit" class="targetButton" value="Select Target">
-      </form>
+      <!-- <form id="selection"> -->
+        <!-- <label for="gridSelection">Type your selection here (Column Letter, Row Number)</label> -->
+        <!-- <input type="text" id="gridSelection" name="gridSelection" tabindex="0" autofocus placeholder="X0"></input>    -->
+        <!-- <input type="submit" class="targetButton" value="Select Target"> -->
+      <!-- </form> -->
     </section>  
   </div>
 

@@ -19,7 +19,9 @@ an implementation of battleship in HTML/CSS/JS
 	* feedback/gameover
 - grid: 2 x 2
 - single ship: 2 squares long
+- one board
 - hard-coded ship placement
+- hard-code board
 - token accessibility, ARIA roles for document structure/semantic tags
 - token responsive, 1 @media rule
 - basic white/teal color scheme and text elements
@@ -31,6 +33,8 @@ an implementation of battleship in HTML/CSS/JS
  	* script.js (plus jQuery)
 - grid: 10 x 10
 - ships: 5, lengths: [2, 3, 3, 4, 5]
+- show two boards
+- dynamically generate board
 - random ship placement
 
 # Wish list

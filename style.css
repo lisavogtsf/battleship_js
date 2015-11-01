@@ -92,19 +92,28 @@ button {
 #activeScreen {
   background-color: white;
 }
-#activeScreen .grid {
-  color: white;
+#activeScreen .gameGrid {
   display: inline-block;
+  font-size: 2.5em;
+  line-height: 2.5em;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
 }
-#activeScreen .grid div {
+#activeScreen .gameGrid li {
+  display: inline-block;
+  /*display: inline;*/
   float: left;
   background-color: teal;
-  height: 100px;
-  width: 100px;
+  height: 98px;
+  width: 98px;
+  border: white dotted 2px;
 }
-#activeScreen .grid .cell {
+#activeScreen .gameGrid li.heading {
   background-color: slateblue;
-  border: white dotted medium;
+}
+#activeScreen .gameGrid li .origin {
+  background-color: white;
 }
 /* for somewhat smaller screens, not quite mobile phone */
 /*tablet, approx 800px wide*/

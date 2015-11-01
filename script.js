@@ -7,6 +7,7 @@ $(document).ready(function () {
      */ 
 
     // -- grid dimensions, square, equal number of columns and rows
+    // TODO add rows
     // var rows = 10;
     var rows = 2;
 
@@ -14,8 +15,15 @@ $(document).ready(function () {
     // TODO /lv plural?
     var targetType = "ship";
     var targetLengths = [2, 3, 3, 4, 5];
-    // var shipsInGame = 5;
     var targetsInGame = 1;
+    // TODO add more targets
+    var possibleTargets = [
+        {
+            placed: false,
+            length: 2,
+            location: []
+        }
+    ];
 
     // -- players
     var numberOfPlayers = 2;
@@ -27,15 +35,18 @@ $(document).ready(function () {
     var gridRow = []; // {array of objects} a single row of one player's grid
     var gridCell = {
         targetPresent: false,
-        hasBeenTarget: false
+        hasBeenTarget: false,
+        coords: ''
     }; // {object} status of a single space on row/in grid
+    var columnHeaders = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    var rowHeaders = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
     // -- game states
     var gameOver;
     var currentPlayer;
     // var activeGame = false;
-    var winner = null;
-    var lastMove = null;
+    var winner;
+    var lastMove;
 
     // -- strings, initial settings
     var strings = {
@@ -61,6 +72,7 @@ $(document).ready(function () {
     // -- buttons
     var startGameButton = document.getElementById('startGame');
     var feedbackButton = document.getElementById('feedback');
+    var cells = document.getElementsByClassName('cell');
 
     /**
      * Set up the game at the very beginning
@@ -82,6 +94,7 @@ $(document).ready(function () {
         $("#startScreen").show();
         $("#feedbackScreen").hide();
         $("#activeScreen").hide();
+        $("footer").show();
     }
     setOpening();
 
@@ -110,7 +123,7 @@ $(document).ready(function () {
         
         // set up message text according to state
         if (state === "readyPlayerOne") {
-            topMessage = strings.SANK_BATTLESHIP;
+            topMessage = strings.NEXT_TURN_MSG;
             feedbackMessage = strings.FIRST_TURN_MSG;
             feedbackButtonMessage = strings.READY_BUTTON;
         }
@@ -167,6 +180,7 @@ $(document).ready(function () {
             for (var j = 0; j < rows; j++) {
                 gridRow = []; // k cells
                 for (var k = 0; k < rows; k++) {
+                    gridCell.coords = columnHeaders[j] + rowHeaders[k]; 
                     gridRow.push(gridCell);
                 }
                 playerGrid.push(gridRow);
@@ -178,8 +192,18 @@ $(document).ready(function () {
         // set up empty board divs
         // TODO make dynamic
 
+        // make cells listen for clicks
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].onclick = selectCell(cells[i].className);
+        }
+
         // set targets
         // TODO make random
+        for (var i = 0; i < numberOfPlayers; i++) {
+            if (i === 0) {
+
+            }
+        }
 
         // show next screen, Ready Player One
         console.error("init end gameOver", gameOver);
@@ -191,27 +215,54 @@ $(document).ready(function () {
      */
     function startActiveTurn () {
         console.log("ACTIVE gameOver", gameOver);
+
         // render board with updates
         playerGrid = gameGrids[currentPlayer];
+        var cellByCoords;
+
+        // stacking the deck
+        playerGrid[0][0].targetPresent = true;
+        playerGrid[0][0].hasBeenTarget = true;
+        playerGrid[0][1].targetPresent = true;
+        playerGrid[1][0].targetPresent = false;
+        playerGrid[1][1].targetPresent = false;
 
         for (var j = 0; j < rows; j++) {
             for (var k = 0; k < rows; k++) {
-
+                cellByCoords = playerGrid[j][k];
+                if (cellByCoords.targetPresent && cellByCoords.hasBeenTarget) {
+                    //
+                }
             }
         }
+
+        // var $gridRows = $('.rivalBoard.grid').children();
+
+        // var cells = [];
+        // // skip row/column headers
+
+        // for (var j = 1; j < $gridRows.length; j++) {
+        //     cells = $gridRows[j].children();
+        //     console.log("cells", cells);
+        //     for (var k = 1; k < cells.length; k++) {
+        //         console.log("cells[k]", cells[k]);
+        //     }
+        // }
 
         // update messages
         $('.topMessage').text(strings.SANK_BATTLESHIP);        
         $('.currentInstructions').text(strings.SELECT_TARGET);        
         $('.feedbackButtonMessage').text(strings.SELECT_TARGET_BUTTON);
+        $('.currentPlayer').text(playerTitles[currentPlayer]);
 
         // hide feedback screen, start for good measure
         // show active scree
         $("#startScreen").hide();
         $("#feedbackScreen").hide();
+        $("footer").hide();
         $("#activeScreen").show();
 
-        // wait on user input
+        // wait on user click
     }
 
 
@@ -261,18 +312,19 @@ $(document).ready(function () {
 
     /**
      * Make selection on active game screen
-     * display other player's privacy before turn, or game over "
-     * @param {event} - click event
+     * display other player's privacy before turn, or game over 
+     * not actually a button
+     * @param {string} cellClass - class of element that was clicked
      */
-    $("#selection").submit(function (event) {
+    function selectCell (cellClass) {
         console.log("selection submission ...");
         event.preventDefault();
         var results; 
 
         // get user input
         // TODO error protection, valid characters etc
-        var selection = '';
-        selection = $("#gridSelection").val()
+        // var selection = '';
+        // selection = $("#gridSelection").val()
         
         // process turn and deliver that info to feedback
         // check/set gameOver
@@ -287,10 +339,10 @@ $(document).ready(function () {
             results = "nextPlayer"
         }
 
-        feedback(results);
+        // feedback(results);
 
         console.log("display other player's privacy before turn, or game over");
-    });
+    }
 
 
 });
