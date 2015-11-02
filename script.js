@@ -91,28 +91,51 @@ $(document).ready(function () {
         // if coord already taken try gain
         // maybe do this in a while loop until say 'target placed'
 
-        // easy static setup, 2 targets, same locations
+        // easy static setup, 2 targets, shifted locations
+        if (this.id === 1) {
+            this.targets[0].cells = [
+                {
+                    coords: 'A' + (2),
+                },
+                {
+                    coords: 'A' + (3),
+                }
+            ];
 
-        this.targets[0].cells = [
-            {
-                coords: 'A' + (2),
-            },
-            {
-                coords: 'A' + (3),
-            }
-        ];
+            this.targets[1].cells = [
+                {
+                    coords: 'B' + (1),
+                },
+                {
+                    coords: 'C' + (1),
+                },
+                {
+                    coords: 'D' + (1),
+                }            
+            ];
+        }
+        if (this.id === 2) {
+            this.targets[0].cells = [
+                {
+                    coords: 'B' + (2),
+                },
+                {
+                    coords: 'B' + (3),
+                }
+            ];
 
-        this.targets[1].cells = [
-            {
-                coords: 'B' + (1),
-            },
-            {
-                coords: 'C' + (1),
-            },
-            {
-                coords: 'D' + (1),
-            }            
-        ];
+            this.targets[1].cells = [
+                {
+                    coords: 'C' + (1),
+                },
+                {
+                    coords: 'D' + (1),
+                },
+                {
+                    coords: 'E' + (1),
+                },                
+            ];
+        }
         
     };
     Player.prototype.seekTarget = function (coords) {
