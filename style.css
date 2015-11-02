@@ -119,6 +119,9 @@ h3 {
 .gameGrid.secretGrid li.target {
   background-color: slateblue;
 }
+.gameGrid.secretGrid li.target.hit {
+  background-color: darkred;
+}
 .gameGrid.rivalGrid {
   font-size: 1.8em;
 }

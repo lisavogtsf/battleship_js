@@ -240,14 +240,9 @@ $(document).ready(function () {
         var domSearchString = '';
         firstPlayer.targets.forEach(function (target) {
             target.cells.forEach(function (cell){
-                console.log("cell", cell);
                 coords = cell.coords;
-                console.log("coords, cell.coords", coords, cell.coords);
                 domSearchString = ".playerOne .secretGrid ." + cell.coords;
-                console.log("domSearchString", domSearchString);
                 $(domSearchString).addClass("target");
-                // $(rivalPlayer.playerClass + " .secretGrid ." + coords).addClass(result);
-                // $(firstPlayer.playerClass + " ." + coords).addClass("target");
             });
         });
 
@@ -257,13 +252,13 @@ $(document).ready(function () {
         secondPlayer.playerTitle = 'Player Two';
         secondPlayer.playerClass = '.playerTwo';
 
-        // // show targets on secret board
-        // secondPlayer.targets.forEach(function (target) {
-        //     target.cells.forEach(function (cell){
-        //         coords = cell.coords;
-        //         $(secondPlayer.playerClass + " ." + coords).addClass("target");
-        //     });
-        // });        
+        secondPlayer.targets.forEach(function (target) {
+            target.cells.forEach(function (cell){
+                coords = cell.coords;
+                domSearchString = ".playerTwo .secretGrid ." + cell.coords;
+                $(domSearchString).addClass("target");
+            });
+        });     
 
         // make cells listen for clicks, pass on coordinate
         $(".rivalGrid .cell").click(function(){
@@ -498,6 +493,11 @@ console.log("secondPlayer", secondPlayer);
     function reset () {
         console.log("resetting game --reset");
         // TODO reset but have leaderboard etc
+
+        // clean off board
+        $(".cell").removeClass("hit miss target");
+        $(".cell").text('');
+
         setOpening();
     }
 
