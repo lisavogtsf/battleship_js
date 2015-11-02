@@ -177,7 +177,8 @@ $(document).ready(function () {
 
     // -- strings, initial settings
     var strings = {
-        GAME_NAME: "Friendship",
+        GAME_NAME: "Battleship",
+        ALT_GAME_NAME: "Friendship",
         SANK_BATTLESHIP: "\"You sank my Battleship!\"",
         FIRST_TURN_MSG: "Ready Player One",
         READY_BUTTON: "Ready!",
@@ -320,7 +321,7 @@ console.log("secondPlayer", secondPlayer);
         $continueButton.unbind();
 
         // -- get text field elements
-        // var $headline = $("#headline");
+        var $headline = $("#headline");
         var $slogan = $("#slogan");
         var $feedbackMessage = $("#feedbackMessage");
         var $currentPlayerName = $("#currentPlayerName");
@@ -335,7 +336,7 @@ console.log("secondPlayer", secondPlayer);
         var sloganText = '';
         var feedbackMessage = '';
         // -- these messages persist unless changed
-        // var headlineText = $headline.text();
+        var headlineText = $headline.text();
         
         // set up message text according to state
         // -- ready player one
@@ -408,6 +409,7 @@ console.log("secondPlayer", secondPlayer);
             } else {
                 feedbackMessage = strings.ERROR_DRAW;
             }
+            headlineText = strings.ALT_GAME_NAME;
             sloganText = strings.GAME_OVER_TOP;
             currentPlayerName = '';
             continueButtonText = strings.RESTART_BUTTON;
@@ -426,7 +428,7 @@ console.log("secondPlayer", secondPlayer);
         $continueButton.text(continueButtonText)
 
         // -- set messages
-        // $headline.text(headlineText);
+        $headline.text(headlineText);
         $slogan.text(sloganText);
         $feedbackMessage.text(feedbackMessage);
         $currentPlayerName.text(currentPlayerName);
