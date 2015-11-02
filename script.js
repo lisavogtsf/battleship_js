@@ -58,14 +58,24 @@ $(document).ready(function () {
     }
     Player.prototype.addTargets = function () {
         for (var i = 0; i < targetsInGame; i ++) {
-            var currentTargetLength = targetLengths[i];
+            var currentTargetLength = 2;
             // TODO make this for real, another for loop to add cells
             // plus positioning
-            var newTarget = {
-                id: i,
-                status: '',
-                cells: [{coords: 'B1', status: ''}, {coords: 'B2', status: ''}]
-            };
+            var newTarget;
+            if (this == firstPlayer) {
+                newTarget = {
+                    id: i,
+                    status: '',
+                    cells: [{coords: 'B1', status: ''}, {coords: 'B2', status: ''}]
+                };
+            }
+            if (this == secondPlayer) {
+                newTarget = {
+                    id: i,
+                    status: '',
+                    cells: [{coords: 'A1', status: ''}, {coords: 'A2', status: ''}]
+                };
+            }
             this.targets.push(newTarget);
         }
     };
@@ -103,7 +113,9 @@ $(document).ready(function () {
         }
     };
     Player.prototype.checkAllTargetsComplete = function () {
-        return this.targetsRemaining === 0;
+        if (this.targetsRemaining === 0) {
+            allTargetsComplete = true;
+        }
     }
 
     // -- strings, initial settings
@@ -116,13 +128,17 @@ $(document).ready(function () {
         NEXT_TURN_MSG: "Get ready for your turn, ",
         ON_TARGET: "Hit!",
         OFF_TARGET: "Miss!",
-        GAME_OVER_TOP: "Game Over!",
+        GAME_OVER_TOP: "Game Over",
         GAME_OVER_MSG: " Won the Game!",
+        TARGET_COMPLETE_VERB: " sank ",
+        LAST_TARGET_COMPLETE: "\'s last ship",
         RESTART_BUTTON: "Restart",
         SELECT_TARGET: "Select your target by clicking on active board",
         SELECT_TARGET_BUTTON: "Select",
         START_GAME: "Start!",
         WELCOME: "Welcome, start a new game:",
+        YOUR_TARGETS: "Your remaining ships: ",
+        THEIR_TARGETS: "Their remaining ships: ",
         TARGET_COMPLETE: "That hit sank a ship!",
         GAME_IN_PROGRESS: "Game in progress",
         ERROR_DRAW: "DRAW: Game over but nobody won! (ERROR)"
@@ -231,23 +247,24 @@ $(document).ready(function () {
         // var $feedbackButton = $("button.feedbackButton");
         
         // -- set up empty variabls to be used by various states
-        // -- get current text if present
         var continueButtonClass = '';
         var continueButtonText = '';
-        // var headlineText = $headline.text();
-        var sloganText = $slogan.text();
-        var feedbackMessage = $feedbackMessage.text();
-        var currentInstructions = $currentInstructions.text();
+        var currentInstructions = '';
         var currentPlayerName = currentPlayer.playerTitle;
+        var sloganText = '';
+        var feedbackMessage = '';
+        // -- these messages persist unless changed
+        // var headlineText = $headline.text();
         
         // set up message text according to state
         // -- ready player one
         if (state === "readyPlayerOne") {
-            // currentInstructions = strings.NEXT_TURN_MSG;
+            currentInstructions = '';
             sloganText = strings.GAME_IN_PROGRESS;
             feedbackMessage = strings.FIRST_TURN_MSG;
             continueButtonText = strings.READY_BUTTON;
             continueButtonClass = "startTurnButton";
+            currentPlayerName = '';
 
             // change color
             $("body").addClass("contrast");
@@ -265,18 +282,21 @@ $(document).ready(function () {
             $(currentPlayer.playerClass).hide();          
             $(rivalPlayer.playerClass).hide();            
 
-            currentInstructions = strings.NEXT_TURN_MSG;
+            // set messages that won't change
             continueButtonClass = "startTurnButton";
+            continueButtonText = strings.READY_BUTTON;
+            currentPlayerName = '';
+            currentInstructions = strings.NEXT_TURN_MSG + currentPlayer.playerTitle;
 
+            // set variable messages
             if (prevMove === "hit") {
                 feedbackMessage = strings.ON_TARGET;
-                if (prevTargetComplete === "true") {
+                if (prevTargetComplete === true) {
                     feedbackMessage = strings.TARGET_COMPLETE;
                 }
-            } else if (prevMove === "miss") {
+            } else {
                 feedbackMessage = strings.OFF_TARGET;
             }
-            continueButtonText = strings.READY_BUTTON;            
 
             // change color
             $("body").addClass("contrast");
@@ -285,9 +305,9 @@ $(document).ready(function () {
 
         if (state === "activeTurn") {
             currentInstructions = strings.SELECT_TARGET;
-            feedbackMessage = '';
-
+            feedbackMessage = strings.YOUR_TARGETS + currentPlayer.targetsRemaining + ", " + strings.THEIR_TARGETS + rivalPlayer.targetsRemaining;
             continueButtonClass = "hide";
+            currentPlayerName = currentPlayer.playerTitle;
 
             // return orig color
             $("body").removeClass();
@@ -303,12 +323,12 @@ $(document).ready(function () {
 
             if (winner && winner == currentPlayer.id) {
                 feedbackMessage = currentPlayer.playerTitle + strings.GAME_OVER_MSG;
+                currentInstructions = currentPlayer.playerTitle + strings.TARGET_COMPLETE_VERB + rivalPlayer.playerTitle + strings.LAST_TARGET_COMPLETE;
             } else {
                 feedbackMessage = strings.ERROR_DRAW;
             }
             sloganText = strings.GAME_OVER_TOP;
             currentPlayerName = '';
-            currentInstructions = "";
             continueButtonText = strings.RESTART_BUTTON;
             continueButtonClass = "restartButton";
 
@@ -366,6 +386,7 @@ $(document).ready(function () {
         var coords = col + row;
 
         prevTargetComplete = false;
+        allTargetsComplete = false;
 
         // TODO error handling to ensure we're inbounds, 
         // that this is the first targeting of this space etc
@@ -382,7 +403,7 @@ $(document).ready(function () {
             rivalPlayer.checkTargetComplete(prevTargetId);
             if (prevTargetComplete) {
                 // -- allTargetsComplete? 'sunk'
-                allTargetsComplete = rivalPlayer.checkAllTargetsComplete();
+                rivalPlayer.checkAllTargetsComplete();
                 if (allTargetsComplete) {
                     gameOver = true;
                     winner = currentPlayer.id;
