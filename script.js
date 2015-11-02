@@ -23,10 +23,10 @@ $(document).ready(function () {
 
     // -- grid dimensions, square, equal number of columns and rows
     // TODO add rows
+    var rows = 5;
     // var rows = 10;
-    var rows = 2;
-    var columnHeaders = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-    var rowHeaders = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    // var columnHeaders = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    // var rowHeaders = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
     // -- game state information
     var currentPlayer,
@@ -42,7 +42,7 @@ $(document).ready(function () {
     // -- targets "ships"
     var targetType = "ship";
     var targetLengths = [2, 3, 3, 4, 5];
-    var targetsInGame = 1;
+    var targetsInGame = 2;
     // TODO add more targets
 
     // -- player info, player class
@@ -56,26 +56,93 @@ $(document).ready(function () {
         this.targets = [];
         this.targetsRemaining = targetsInGame;
     }
+    // add proper number/length of targets
+    // TODO plus positioning
     Player.prototype.addTargets = function () {
+        var newTarget;
         for (var i = 0; i < targetsInGame; i ++) {
             var currentTargetLength = targetLengths[i];
-            // TODO make this for real, another for loop to add cells
-            // plus positioning
-            var newTarget = {
+            newTarget = {
                 id: i,
                 status: '',
-                cells: [{coords: 'B1', status: ''}, {coords: 'B2', status: ''}]
+                cells: []
             };
+            var newCell;
+            for (var j = 0; j < currentTargetLength; j++) {
+                newCell = {
+                    coords: '',
+                    status: ''
+                };   
+                newTarget.cells.push(newCell);
+            }
             this.targets.push(newTarget);
         }
+    };
+    Player.prototype.positionTargets = function () {
+
+        // for each target
+        // get random x starting point
+        // get random y starting point
+        // random coin flip for orientation, right or down
+        // use those to find a placement
+        // will you go off the board? try again
+        // figure out the coords that correspond to each cell of target
+        // compare each coord with a basic array of used coord strings
+        // if coord already taken try gain
+        // maybe do this in a while loop until say 'target placed'
+
+        // easy static setup, 2 targets, shifted locations
+        if (this.id === 1) {
+            this.targets[0].cells = [
+                {
+                    coords: 'A' + (2),
+                },
+                {
+                    coords: 'A' + (3),
+                }
+            ];
+
+            this.targets[1].cells = [
+                {
+                    coords: 'B' + (1),
+                },
+                {
+                    coords: 'C' + (1),
+                },
+                {
+                    coords: 'D' + (1),
+                }            
+            ];
+        }
+        if (this.id === 2) {
+            this.targets[0].cells = [
+                {
+                    coords: 'B' + (2),
+                },
+                {
+                    coords: 'B' + (3),
+                }
+            ];
+
+            this.targets[1].cells = [
+                {
+                    coords: 'C' + (1),
+                },
+                {
+                    coords: 'D' + (1),
+                },
+                {
+                    coords: 'E' + (1),
+                },                
+            ];
+        }
+        
     };
     Player.prototype.seekTarget = function (coords) {
         prevMove = '';
         prevTargetId = null;
         this.targets.forEach(function (target) {
             target.cells.forEach(function(cell) {
-                // console.log("coords, cell.coords", coords, cell.coords);
-                // console.log("coords == cell.coords", coords == cell.coords);
                 // could do error checking for row/col in bounds
                 // for cell status being empty
                 if (coords == cell.coords) {
@@ -103,12 +170,15 @@ $(document).ready(function () {
         }
     };
     Player.prototype.checkAllTargetsComplete = function () {
-        return this.targetsRemaining === 0;
+        if (this.targetsRemaining === 0) {
+            allTargetsComplete = true;
+        }
     }
 
     // -- strings, initial settings
     var strings = {
-        GAME_NAME: "Friendship",
+        GAME_NAME: "Battleship",
+        ALT_GAME_NAME: "Friendship",
         SANK_BATTLESHIP: "\"You sank my Battleship!\"",
         FIRST_TURN_MSG: "Ready Player One",
         READY_BUTTON: "Ready!",
@@ -116,13 +186,17 @@ $(document).ready(function () {
         NEXT_TURN_MSG: "Get ready for your turn, ",
         ON_TARGET: "Hit!",
         OFF_TARGET: "Miss!",
-        GAME_OVER_TOP: "Game Over!",
+        GAME_OVER_TOP: "Game Over",
         GAME_OVER_MSG: " Won the Game!",
+        TARGET_COMPLETE_VERB: " sank ",
+        LAST_TARGET_COMPLETE: "\'s last ship",
         RESTART_BUTTON: "Restart",
         SELECT_TARGET: "Select your target by clicking on active board",
         SELECT_TARGET_BUTTON: "Select",
         START_GAME: "Start!",
         WELCOME: "Welcome, start a new game:",
+        YOUR_TARGETS: "Your remaining ships: ",
+        THEIR_TARGETS: "Their remaining ships: ",
         TARGET_COMPLETE: "That hit sank a ship!",
         GAME_IN_PROGRESS: "Game in progress",
         ERROR_DRAW: "DRAW: Game over but nobody won! (ERROR)"
@@ -181,12 +255,34 @@ $(document).ready(function () {
         // create two players, set their targets
         firstPlayer = new Player(1);
         firstPlayer.addTargets();
+        firstPlayer.positionTargets();
         firstPlayer.playerTitle = 'Player One';
         firstPlayer.playerClass = '.playerOne';
+
+        // show targets on secret board
+        var coords;
+        var domSearchString = '';
+        firstPlayer.targets.forEach(function (target) {
+            target.cells.forEach(function (cell){
+                coords = cell.coords;
+                domSearchString = ".playerOne .secretGrid ." + cell.coords;
+                $(domSearchString).addClass("target");
+            });
+        });
+
         secondPlayer = new Player(2);
         secondPlayer.addTargets();
+        secondPlayer.positionTargets();
         secondPlayer.playerTitle = 'Player Two';
         secondPlayer.playerClass = '.playerTwo';
+
+        secondPlayer.targets.forEach(function (target) {
+            target.cells.forEach(function (cell){
+                coords = cell.coords;
+                domSearchString = ".playerTwo .secretGrid ." + cell.coords;
+                $(domSearchString).addClass("target");
+            });
+        });     
 
         // make cells listen for clicks, pass on coordinate
         $(".rivalGrid .cell").click(function(){
@@ -198,9 +294,11 @@ $(document).ready(function () {
         allTargetsComplete = false;
         currentPlayer = firstPlayer;
         rivalPlayer = secondPlayer;
+console.log("firstPlayer", firstPlayer);
+console.log("secondPlayer", secondPlayer);
 
         // show next screen, Ready Player One
-        stateShifter("readyPlayerOne", gameOver);
+        stateShifter("readyPlayerOne");
     }
 
 
@@ -223,7 +321,7 @@ $(document).ready(function () {
         $continueButton.unbind();
 
         // -- get text field elements
-        // var $headline = $("#headline");
+        var $headline = $("#headline");
         var $slogan = $("#slogan");
         var $feedbackMessage = $("#feedbackMessage");
         var $currentPlayerName = $("#currentPlayerName");
@@ -231,23 +329,24 @@ $(document).ready(function () {
         // var $feedbackButton = $("button.feedbackButton");
         
         // -- set up empty variabls to be used by various states
-        // -- get current text if present
         var continueButtonClass = '';
         var continueButtonText = '';
-        // var headlineText = $headline.text();
-        var sloganText = $slogan.text();
-        var feedbackMessage = $feedbackMessage.text();
-        var currentInstructions = $currentInstructions.text();
+        var currentInstructions = '';
         var currentPlayerName = currentPlayer.playerTitle;
+        var sloganText = '';
+        var feedbackMessage = '';
+        // -- these messages persist unless changed
+        var headlineText = $headline.text();
         
         // set up message text according to state
         // -- ready player one
         if (state === "readyPlayerOne") {
-            // currentInstructions = strings.NEXT_TURN_MSG;
+            currentInstructions = '';
             sloganText = strings.GAME_IN_PROGRESS;
             feedbackMessage = strings.FIRST_TURN_MSG;
             continueButtonText = strings.READY_BUTTON;
             continueButtonClass = "startTurnButton";
+            currentPlayerName = '';
 
             // change color
             $("body").addClass("contrast");
@@ -265,18 +364,21 @@ $(document).ready(function () {
             $(currentPlayer.playerClass).hide();          
             $(rivalPlayer.playerClass).hide();            
 
-            currentInstructions = strings.NEXT_TURN_MSG;
+            // set messages that won't change
             continueButtonClass = "startTurnButton";
+            continueButtonText = strings.READY_BUTTON;
+            currentPlayerName = '';
+            currentInstructions = strings.NEXT_TURN_MSG + currentPlayer.playerTitle;
 
+            // set variable messages
             if (prevMove === "hit") {
                 feedbackMessage = strings.ON_TARGET;
-                if (prevTargetComplete === "true") {
+                if (prevTargetComplete === true) {
                     feedbackMessage = strings.TARGET_COMPLETE;
                 }
-            } else if (prevMove === "miss") {
+            } else {
                 feedbackMessage = strings.OFF_TARGET;
             }
-            continueButtonText = strings.READY_BUTTON;            
 
             // change color
             $("body").addClass("contrast");
@@ -285,9 +387,9 @@ $(document).ready(function () {
 
         if (state === "activeTurn") {
             currentInstructions = strings.SELECT_TARGET;
-            feedbackMessage = '';
-
+            feedbackMessage = strings.YOUR_TARGETS + currentPlayer.targetsRemaining + ", " + strings.THEIR_TARGETS + rivalPlayer.targetsRemaining;
             continueButtonClass = "hide";
+            currentPlayerName = currentPlayer.playerTitle;
 
             // return orig color
             $("body").removeClass();
@@ -303,12 +405,13 @@ $(document).ready(function () {
 
             if (winner && winner == currentPlayer.id) {
                 feedbackMessage = currentPlayer.playerTitle + strings.GAME_OVER_MSG;
+                currentInstructions = currentPlayer.playerTitle + strings.TARGET_COMPLETE_VERB + rivalPlayer.playerTitle + strings.LAST_TARGET_COMPLETE;
             } else {
                 feedbackMessage = strings.ERROR_DRAW;
             }
+            headlineText = strings.ALT_GAME_NAME;
             sloganText = strings.GAME_OVER_TOP;
             currentPlayerName = '';
-            currentInstructions = "";
             continueButtonText = strings.RESTART_BUTTON;
             continueButtonClass = "restartButton";
 
@@ -325,7 +428,7 @@ $(document).ready(function () {
         $continueButton.text(continueButtonText)
 
         // -- set messages
-        // $headline.text(headlineText);
+        $headline.text(headlineText);
         $slogan.text(sloganText);
         $feedbackMessage.text(feedbackMessage);
         $currentPlayerName.text(currentPlayerName);
@@ -366,6 +469,7 @@ $(document).ready(function () {
         var coords = col + row;
 
         prevTargetComplete = false;
+        allTargetsComplete = false;
 
         // TODO error handling to ensure we're inbounds, 
         // that this is the first targeting of this space etc
@@ -382,7 +486,7 @@ $(document).ready(function () {
             rivalPlayer.checkTargetComplete(prevTargetId);
             if (prevTargetComplete) {
                 // -- allTargetsComplete? 'sunk'
-                allTargetsComplete = rivalPlayer.checkAllTargetsComplete();
+                rivalPlayer.checkAllTargetsComplete();
                 if (allTargetsComplete) {
                     gameOver = true;
                     winner = currentPlayer.id;
@@ -414,6 +518,11 @@ $(document).ready(function () {
     function reset () {
         console.log("resetting game --reset");
         // TODO reset but have leaderboard etc
+
+        // clean off board
+        $(".cell").removeClass("hit miss target");
+        $(".cell").text('');
+
         setOpening();
     }
 
