@@ -2,6 +2,7 @@
 
 /**
  * List of game functions:
+ * Player constructor and prototype functions
  * setOpening ()
  * init ()
  * stateShifter (state, gameOver)
@@ -24,35 +25,6 @@ $(document).ready(function () {
     // TODO add rows
     // var rows = 10;
     var rows = 2;
-
-    // -- targets "ships"
-    // TODO /lv plural?
-    var targetType = "ship";
-    var targetLengths = [2, 3, 3, 4, 5];
-    var targetsInGame = 1;
-    // TODO add more targets
-    var possibleTargets = [
-        {
-            placed: false,
-            length: 2,
-            location: []
-        }
-    ];
-
-    // -- players
-    var numberOfPlayers = 2;
-    var playerTitles = ['Player One', 'Player Two'];
-    var playerClasses = ['.playerOne', '.playerTwo'];
-
-    // -- grids, declare them
-    var gameGrids = []; // {3D array or array of grids} all player grids in game
-    var playerGrid = []; // {two-dimensional array} one player's grid, made of rows, cells
-    var gridRow = []; // {array of objects} a single row of one player's grid
-    var gridCell = {
-        targetPresent: false,
-        hasBeenTarget: false,
-        coords: ''
-    }; // {object} status of a single space on row/in grid
     var columnHeaders = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
     var rowHeaders = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
@@ -61,10 +33,78 @@ $(document).ready(function () {
         rivalPlayer,
         activeGame,
         prevMove,
+        prevTargetId,
         prevTargetComplete,
         allTargetsComplete,
         gameOver,
         winner;
+
+    // -- targets "ships"
+    var targetType = "ship";
+    var targetLengths = [2, 3, 3, 4, 5];
+    var targetsInGame = 1;
+    // TODO add more targets
+
+    // -- player info, player class
+    var numberOfPlayers = 2;
+    var firstPlayer,
+        secondPlayer;
+    var players = [firstPlayer, secondPlayer];
+
+    function Player (id) {
+        this.id = id;
+        this.targets = [];
+        this.targetsRemaining = targetsInGame;
+    }
+    Player.prototype.addTargets = function () {
+        for (var i = 0; i < targetsInGame; i ++) {
+            var currentTargetLength = targetLengths[i];
+            // TODO make this for real, another for loop to add cells
+            // plus positioning
+            var newTarget = {
+                id: i,
+                status: '',
+                cells: [{coords: 'B1', status: ''}, {coords: 'B2', status: ''}]
+            };
+            this.targets.push(newTarget);
+        }
+    };
+    Player.prototype.seekTarget = function (coords) {
+        prevMove = '';
+        prevTargetId = null;
+        this.targets.forEach(function (target) {
+            target.cells.forEach(function(cell) {
+                // console.log("coords, cell.coords", coords, cell.coords);
+                // console.log("coords == cell.coords", coords == cell.coords);
+                // could do error checking for row/col in bounds
+                // for cell status being empty
+                if (coords == cell.coords) {
+                    cell.status = "hit";
+                    prevMove = "hit";
+                    prevTargetId = target.id;
+                }
+            });
+        });
+        if (prevMove != "hit") {
+            prevMove = "miss";
+        }
+    };
+    Player.prototype.checkTargetComplete = function (prevTargetId) {
+        var targetToCheck = this.targets[prevTargetId];
+        prevTargetComplete = true;
+        targetToCheck.cells.forEach(function (cell){
+            if (cell.status !== 'hit') {
+                prevTargetComplete = false;
+            }
+        });
+        // if all cells have been hit, remove this target from count
+        if (prevTargetComplete) {
+            this.targetsRemaining -= 1;
+        }
+    };
+    Player.prototype.checkAllTargetsComplete = function () {
+        return this.targetsRemaining === 0;
+    }
 
     // -- strings, initial settings
     var strings = {
@@ -136,24 +176,27 @@ $(document).ready(function () {
      */
     function init (){
         console.log("--init, gameOver:", gameOver);
-        
-        // game is no longer over, has begun
-        gameOver = false;
-        currentPlayer = 0;
-        rivalPlayer = 1;
 
-        // each player gets a set of targets 
-
+        // create two players, set their targets
+        firstPlayer = new Player(1);
+        firstPlayer.addTargets();
+        firstPlayer.playerTitle = 'Player One';
+        firstPlayer.playerClass = '.playerOne';
+        secondPlayer = new Player(2);
+        secondPlayer.addTargets();
+        secondPlayer.playerTitle = 'Player Two';
+        secondPlayer.playerClass = '.playerTwo';
 
         // make cells listen for clicks, pass on coordinate
         $(".rivalGrid .cell").click(function(){
-            console.log("processTargetSelection", processTargetSelection);
-            console.log("this.className[0]", this.className[0]);
-            processTargetSelection(this, this.className[0], this.className[1]);
+            processTargetSelection(this.className[0], this.className[1]);
         });
 
-        // set target locations and save
-        // TODO make random
+        // game is no longer over, has begun
+        gameOver = false;
+        allTargetsComplete = false;
+        currentPlayer = firstPlayer;
+        rivalPlayer = secondPlayer;
 
         // show next screen, Ready Player One
         stateShifter("readyPlayerOne", gameOver);
@@ -163,7 +206,7 @@ $(document).ready(function () {
 
     /**
      * Shifts between states
-     * readyPlayerOne, PlayerTurn, GameOver
+     * readyPlayerOne, nextPlayer, activeTurn, gameover
      * @param {string} state - current feedback state
      */
 
@@ -194,7 +237,7 @@ $(document).ready(function () {
         var sloganText = $slogan.text();
         var feedbackMessage = $feedbackMessage.text();
         var currentInstructions = $currentInstructions.text();
-        var currentPlayerName = playerTitles[currentPlayer] + " " + currentPlayer;
+        var currentPlayerName = currentPlayer.playerTitle;
         
         // set up message text according to state
         // -- ready player one
@@ -209,8 +252,8 @@ $(document).ready(function () {
             $("body").addClass("contrast");
 
             // show no boards but show stage
-            $(playerClasses[currentPlayer]).hide();
-            $(playerClasses[rivalPlayer]).hide();
+            $(currentPlayer.playerClass).hide();
+            $(rivalPlayer.playerClass).hide();
             $("#gameStage").show();
         }
 
@@ -218,10 +261,10 @@ $(document).ready(function () {
         if (state === "nextPlayer") {
             
             // show/hide boards
-            $(playerClasses[currentPlayer]).hide();          
-            $(playerClasses[rivalPlayer]).hide();            
+            $(currentPlayer.playerClass).hide();          
+            $(rivalPlayer.playerClass).hide();            
 
-            currentInstructions = strings.NEXT_TURN_MSG + playerTitles[currentPlayer];
+            currentInstructions = strings.NEXT_TURN_MSG;
             continueButtonClass = "startTurnButton";
 
             if (prevMove === "hit") {
@@ -240,7 +283,7 @@ $(document).ready(function () {
         }
 
         if (state === "activeTurn") {
-            currentInstructions = strings.SELECT_TARGET + ", " + playerTitles[currentPlayer];
+            currentInstructions = strings.SELECT_TARGET;
             feedbackMessage = '';
 
             continueButtonClass = "hide";
@@ -249,21 +292,19 @@ $(document).ready(function () {
             $("body").removeClass();
 
             // hide rival player's boards
-            $(playerClasses[rivalPlayer]).hide();
+            $(rivalPlayer.playerClass).hide();
             // show current player boards
-            $(playerClasses[currentPlayer]).show();
+            $(currentPlayer.playerClass).show();
         }
 
         // set up messages for gameover
         if (state === "gameover") {
             // currentInstructions = strings.GAME_OVER_TOP;
 
-            if (winner && winner == playerTitles[0]) {
-                feedbackMessage = playerTitles[0] + strings.GAME_OVER_MSG;
-            } else if (winner && winner == playerTitles[1]) {
-                feedbackMessage = playerTitles[1] + strings.GAME_OVER_MSG;
+            if (winner && winner.id == rivalPlayer.id) {
+                feedbackMessage = rivalPlayer.playerTitle + strings.GAME_OVER_MSG;
             } else {
-                feedbackMessage = scripts.ERROR_DRAW;
+                feedbackMessage = strings.ERROR_DRAW;
             }
             continueButtonText = strings.RESTART_BUTTON;
             continueButtonClass = "restartButton";
@@ -272,8 +313,8 @@ $(document).ready(function () {
             $("body").addClass("contrast");
 
             // hide boards
-            $(playerClasses[currentPlayer]).hide();
-            $(playerClasses[rivalPlayer]).hide();
+            $(currentPlayer.playerClass).hide();
+            $(rivalPlayer.playerClass).hide();
         }
 
         // -- set button class/text
@@ -313,54 +354,47 @@ $(document).ready(function () {
      * @param {string} col - column coordinate
      * @param {string} row - row coordinate
      */
-    function processTargetSelection (element, col, row) {
+    function processTargetSelection (col, row) {
         console.log("--processTargetSelection");
-        console.log("element, col, row", element, col, row);
+        console.log("col, row", col, row);
 
-        var state; 
-        // TODO error handling to ensure we're inbounds
+        var coords = col + row;
+        var state,
+            result;
 
-        // Is it a hit or a miss?
-        // compare col/row to col/row of remaining targets
+        prevTargetComplete = false;
 
+        // TODO error handling to ensure we're inbounds, 
+        // that this is the first targeting of this space etc
+
+        // current player targets rival player
+        rivalPlayer.seekTarget(coords);
+        result = prevMove;
+console.log("result", result);
         // -- check if this was a hit or miss
+        if (result === "hit") {
             // -- if a target is at that col/row, 
-            // mark as hit on target
-            // add class 'hit' to cell
-            // set prevMove variable to 'hit'
             // -- check whether this completes the target 'sinks it'
-                // --if completes
-                // set prevTargetComplete variable to 'true'
+            rivalPlayer.checkTargetComplete(prevTargetId);
+            if (prevTargetComplete) {
                 // -- allTargetsComplete? 'sunk'
-                    // -- if yes set allTargetsComplete to true
-                    // -- else set allTargetsComplete to false
-
-                // -- if doesn't complete
-                // set prevTargetComplete variable to 'false'
-
-            // -- if it is a miss
-            // add class 'miss' to cell
-            // set prevMove variable to 'miss'
-            // set prevTargetComplete variable to 'false'
-
-        // -- pass prevMove, prevTargetComplete, allTargetsComplete variables to 'feedback'
-        // don't really pass them, but that idea
-        
-        // process turn and deliver that info to feedback
-        // check/set gameOver
-        // check/set hit/miss
-        
-        // advance whose turn it is
-
-        // TODO remove, for testing
-        prevMove = "hit";
+                allTargetsComplete = rivalPlayer.checkAllTargetsComplete();
+                if (allTargetsComplete) {
+                    gameOver = true;
+                    winner = currentPlayer.id;
+                }
+            }
+        }
+        // add result class to cell
+        $(currentPlayer.playerClass + " .rivalGrid ." + coords).addClass(result);
+        $(rivalPlayer.playerClass + " .secretGrid ." + coords).addClass(result);
 
         if (gameOver) {
             state = "gameover";
         } else {
             // advance turn
-            currentPlayer = currentPlayer ? 0 : 1;
-            rivalPlayer = currentPlayer ? 0 : 1;
+            currentPlayer = (currentPlayer == firstPlayer) ? secondPlayer : firstPlayer;
+            rivalPlayer = (rivalPlayer == firstPlayer) ? secondPlayer : firstPlayer;
             state = "nextPlayer"
         }
 
@@ -376,7 +410,5 @@ $(document).ready(function () {
         // TODO reset but have leaderboard etc
         setOpening();
     }
-
-
 
 });
