@@ -116,7 +116,7 @@ $(document).ready(function () {
         NEXT_TURN_MSG: "Get ready for your turn, ",
         ON_TARGET: "Hit!",
         OFF_TARGET: "Miss!",
-        GAME_OVER_TOP: "Congratulations to the Winner!",
+        GAME_OVER_TOP: "Game Over!",
         GAME_OVER_MSG: " Won the Game!",
         RESTART_BUTTON: "Restart",
         SELECT_TARGET: "Select your target by clicking on active board",
@@ -145,6 +145,7 @@ $(document).ready(function () {
         $("#headline").text(strings.GAME_NAME);
         $("#slogan").text(strings.SANK_BATTLESHIP);
         $("#feedbackMessage").text(strings.WELCOME);
+        $("#currentInstructions").text('');
 
         // -- set button text and class
         $("button#continue").text(strings.START_GAME);
@@ -299,13 +300,15 @@ $(document).ready(function () {
 
         // set up messages for gameover
         if (state === "gameover") {
-            // currentInstructions = strings.GAME_OVER_TOP;
 
-            if (winner && winner.id == rivalPlayer.id) {
-                feedbackMessage = rivalPlayer.playerTitle + strings.GAME_OVER_MSG;
+            if (winner && winner == currentPlayer.id) {
+                feedbackMessage = currentPlayer.playerTitle + strings.GAME_OVER_MSG;
             } else {
                 feedbackMessage = strings.ERROR_DRAW;
             }
+            sloganText = GAME_OVER_TOP;
+            currentPlayerName = '';
+            currentInstructions = "";
             continueButtonText = strings.RESTART_BUTTON;
             continueButtonClass = "restartButton";
 
@@ -356,11 +359,11 @@ $(document).ready(function () {
      */
     function processTargetSelection (col, row) {
         console.log("--processTargetSelection");
-        console.log("col, row", col, row);
 
-        var coords = col + row;
         var state,
             result;
+        var resultSymbol = '0';
+        var coords = col + row;
 
         prevTargetComplete = false;
 
@@ -370,10 +373,11 @@ $(document).ready(function () {
         // current player targets rival player
         rivalPlayer.seekTarget(coords);
         result = prevMove;
-console.log("result", result);
+
         // -- check if this was a hit or miss
         if (result === "hit") {
             // -- if a target is at that col/row, 
+            resultSymbol = 'X';
             // -- check whether this completes the target 'sinks it'
             rivalPlayer.checkTargetComplete(prevTargetId);
             if (prevTargetComplete) {
@@ -387,7 +391,9 @@ console.log("result", result);
         }
         // add result class to cell
         $(currentPlayer.playerClass + " .rivalGrid ." + coords).addClass(result);
+        $(currentPlayer.playerClass + " .rivalGrid ." + coords).text(resultSymbol);
         $(rivalPlayer.playerClass + " .secretGrid ." + coords).addClass(result);
+        $(rivalPlayer.playerClass + " .secretGrid ." + coords).text(resultSymbol);
 
         if (gameOver) {
             state = "gameover";

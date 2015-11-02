@@ -7,7 +7,6 @@ an implementation of battleship in HTML/CSS/JS
 	* start
 	* privacy/feedback
 	* active turn 
-- mini step one: display an emptied board reflecting empty data structure
 
 * game states
 	* start
