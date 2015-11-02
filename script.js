@@ -306,7 +306,7 @@ $(document).ready(function () {
             } else {
                 feedbackMessage = strings.ERROR_DRAW;
             }
-            sloganText = GAME_OVER_TOP;
+            sloganText = strings.GAME_OVER_TOP;
             currentPlayerName = '';
             currentInstructions = "";
             continueButtonText = strings.RESTART_BUTTON;
