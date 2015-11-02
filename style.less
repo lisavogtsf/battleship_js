@@ -1,0 +1,180 @@
+/* Style for an implementation of Battleship */
+
+@mainColor: teal;
+@contrastColor: white;
+@borderRadiusStandard: 10px;
+@secretColor: darkslategrey;
+@rivalColor: slateblue;
+@hitColor: darkred;
+@missColor: gray;
+@hitText: 'X';
+@missText: '0';
+
+body {
+  background-color: @contrastColor;
+  color: @mainColor;
+  font-family: sans-serif;
+  text-align: center;
+  margin: 0 auto;
+  height: 100%;
+  &.contrast {
+    background-color: @mainColor;
+    color: @contrastColor;
+  }
+}
+
+/* overriding baked-in style of semantic tags */
+
+/* site-wide text settings */
+h1, 
+h2, 
+h3,
+h4,
+a {
+  margin: 0 auto;
+  color: @mainColor;
+  .contrast & {
+    color: @contrastColor;
+  }
+}
+
+/* make all sections full width, centered */
+header, 
+footer,
+section {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hide {
+  display: none;
+}
+
+/* Setting up the screen */
+
+header {
+  height: 10%;
+  padding: 20px 0;
+  h1 {
+    font-size: 3.5em;
+  }
+  h2 {
+    font-style: italic;
+    font-size: 1em;
+  }
+}
+
+section#messages {}
+
+section#gameStage {}
+
+section#playerInput {}
+
+footer {
+  height: 10%;
+  padding: 5px 0;
+  h5 {
+    font-size: .9em;
+    margin: .5em auto;
+  }
+}
+
+button {
+  background-color: @contrastColor;
+  color: @mainColor;
+  border-radius: @borderRadiusStandard;
+  padding: 5px;
+  margin: 5px 0;
+}
+
+:focus {
+  outline: thin dotted;
+}
+
+h3 {
+  padding: 20px 0;
+}
+
+/* Game Grid Style, can appear on active or feedback */
+.gameGrid {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  color: @contrastColor;
+
+  ul {
+    margin-top: 0;
+  }
+
+  li {
+    display: inline-block;
+    float: left;
+    border: white dotted 2px;
+    background-color: @mainColor;
+    &.cell:focus,
+    &.cell:active {
+      outline: thin dotted;
+    }
+    &.hit {
+      content: @hitText;
+      background-color: @hitColor;
+    }
+    &.miss {
+      content: @missText;
+      background-color: @missColor;
+    }
+  }
+
+  &.secretGrid {
+    font-size: 1.5em;
+    line-height: 2em;
+    li {
+      height: 48px;
+      width: 48px;
+      &.heading {
+        background-color: @secretColor;
+      }
+    }  
+  }
+
+  &.rivalGrid {
+    font-size: 2.5em;
+    h3 {
+      line-height: 1em
+    }
+    li {
+      line-height: 2.5em;
+      height: 98px;
+      width: 98px;
+      &.heading {
+        background-color: @rivalColor;
+      }
+      &.cell {
+        cursor: pointer;
+        &.hit,
+        &.miss {
+          pointer-events: none;
+        }
+      }
+    }
+  }
+}
+
+/* for somewhat smaller screens, not quite mobile phone */
+/*tablet, approx 800px wide*/
+/*and (min-width: 600px) */
+@media all and (min-width: 600px) and (max-width: 1023px) {
+  div.home {
+    /*TODO /lv change to proper color, currently only a marker*/
+    /*background-color: teal;*/
+  }
+  div.about {
+    /*TODO /lv change to proper color, currently only a marker*/
+    /*background-color: teal;*/
+  }
+  div#contact {
+    /*TODO /lv change to proper color, currently only a marker*/
+    /*background-color: teal;*/
+  }
+}
+

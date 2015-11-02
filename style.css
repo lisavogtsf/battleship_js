@@ -1,39 +1,136 @@
-// Style of an implementation of Battleship
-
+/* Style for an implementation of Battleship */
 body {
   background-color: white;
   color: teal;
   font-family: sans-serif;
   text-align: center;
+  margin: 0 auto;
+  height: 100%;
 }
-
+body.contrast {
+  background-color: teal;
+  color: white;
+}
+/* overriding baked-in style of semantic tags */
+/* site-wide text settings */
+h1,
+h2,
+h3,
+h4,
+a {
+  margin: 0 auto;
+  color: teal;
+}
+.contrast h1,
+.contrast h2,
+.contrast h3,
+.contrast h4,
+.contrast a {
+  color: white;
+}
+/* make all sections full width, centered */
+header,
+footer,
+section {
+  margin: 0 auto;
+  width: 100%;
+}
+.hide {
+  display: none;
+}
+/* Setting up the screen */
 header {
-  margin: 0 auto;
+  height: 10%;
+  padding: 20px 0;
 }
-
-footer {
-  margin: 0 auto;
+header h1 {
+  font-size: 3.5em;
 }
-
-main {
-    margin: 0 auto;
-}
-
-h1, h2, h3 {
-  margin: 0 auto;
+header h2 {
   font-style: italic;
+  font-size: 1em;
 }
-
-/*temp*/
-div {
-  height: 100px;
-  width: 100px;
+footer {
+  height: 10%;
+  padding: 5px 0;
+}
+footer h5 {
+  font-size: .9em;
+  margin: .5em auto;
+}
+button {
+  background-color: white;
+  color: teal;
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px 0;
+}
+:focus {
+  outline: thin dotted;
+}
+h3 {
+  padding: 20px 0;
+}
+/* Game Grid Style, can appear on active or feedback */
+.gameGrid {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+}
+.gameGrid ul {
+  margin-top: 0;
+}
+.gameGrid li {
+  display: inline-block;
+  float: left;
+  border: white dotted 2px;
   background-color: teal;
 }
-
-
-/* 
-
+.gameGrid li.cell:focus,
+.gameGrid li.cell:active {
+  outline: thin dotted;
+}
+.gameGrid li.hit {
+  content: 'X';
+  background-color: darkred;
+}
+.gameGrid li.miss {
+  content: '0';
+  background-color: gray;
+}
+.gameGrid.secretGrid {
+  font-size: 1.5em;
+  line-height: 2em;
+}
+.gameGrid.secretGrid li {
+  height: 48px;
+  width: 48px;
+}
+.gameGrid.secretGrid li.heading {
+  background-color: darkslategrey;
+}
+.gameGrid.rivalGrid {
+  font-size: 2.5em;
+}
+.gameGrid.rivalGrid h3 {
+  line-height: 1em;
+}
+.gameGrid.rivalGrid li {
+  line-height: 2.5em;
+  height: 98px;
+  width: 98px;
+}
+.gameGrid.rivalGrid li.heading {
+  background-color: slateblue;
+}
+.gameGrid.rivalGrid li.cell {
+  cursor: pointer;
+}
+.gameGrid.rivalGrid li.cell.hit,
+.gameGrid.rivalGrid li.cell.miss {
+  pointer-events: none;
+}
 /* for somewhat smaller screens, not quite mobile phone */
 /*tablet, approx 800px wide*/
 /*and (min-width: 600px) */
@@ -51,3 +148,5 @@ div {
     /*background-color: teal;*/
   }
 }
+
+/*# sourceMappingURL=style.css.map */
