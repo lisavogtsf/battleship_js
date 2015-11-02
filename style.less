@@ -1,14 +1,23 @@
 /* Style for an implementation of Battleship */
 
+@rows: 10;
+@secretBoardSize: 250px;
+@rivalBoardSize: 450px;
+@cellBorder: 2px;
+@secretCellSize: @secretBoardSize / @rows - @cellBorder;
+@rivalCellSize: @rivalBoardSize / @rows - @cellBorder;
+
 @mainColor: teal;
 @contrastColor: white;
 @borderRadiusStandard: 10px;
 @secretColor: darkslategrey;
 @rivalColor: slateblue;
+@targetColor: @rivalColor;
 @hitColor: darkred;
 @missColor: gray;
-@hitText: 'X';
-@missText: '0';
+/*@hitText: '';*/
+/*@missText: '';*/
+
 
 body {
   background-color: @contrastColor;
@@ -43,6 +52,7 @@ header,
 footer,
 section {
   margin: 0 auto;
+  padding: 0;
   width: 100%;
 }
 
@@ -54,7 +64,7 @@ section {
 
 header {
   height: 10%;
-  padding: 20px 0;
+  padding: 10px 0;
   h1 {
     font-size: 3.5em;
   }
@@ -64,7 +74,11 @@ header {
   }
 }
 
-section#messages {}
+section#messages {
+  .contrast & {
+    min-height: 100px;
+  }
+}
 
 section#gameStage {}
 
@@ -92,7 +106,7 @@ button {
 }
 
 h3 {
-  padding: 20px 0;
+  padding: 10px 0;
 }
 
 /* Game Grid Style, can appear on active or feedback */
@@ -109,43 +123,46 @@ h3 {
   li {
     display: inline-block;
     float: left;
-    border: white dotted 2px;
+    border: white dotted @cellBorder;
     background-color: @mainColor;
     &.cell:focus,
     &.cell:active {
       outline: thin dotted;
     }
     &.hit {
-      content: @hitText;
+      /*content: @hitText;*/
       background-color: @hitColor;
     }
     &.miss {
-      content: @missText;
+      /*content: @missText;*/
       background-color: @missColor;
     }
   }
 
   &.secretGrid {
-    font-size: 1.5em;
-    line-height: 2em;
+    font-size: 9em / @rows;
+    line-height: 15em / @rows;
     li {
-      height: 48px;
-      width: 48px;
+      height: @secretCellSize;
+      width: @secretCellSize;
       &.heading {
         background-color: @secretColor;
+      }
+      &.target {
+        background-color: @targetColor;
       }
     }  
   }
 
   &.rivalGrid {
-    font-size: 2.5em;
+    font-size: 18em / @rows;
     h3 {
-      line-height: 1em
+      line-height: 9em / @rows;
     }
     li {
-      line-height: 2.5em;
-      height: 98px;
-      width: 98px;
+      line-height: 18em / @rows;
+      height: @rivalCellSize;
+      width: @rivalCellSize;
       &.heading {
         background-color: @rivalColor;
       }
@@ -164,17 +181,6 @@ h3 {
 /*tablet, approx 800px wide*/
 /*and (min-width: 600px) */
 @media all and (min-width: 600px) and (max-width: 1023px) {
-  div.home {
-    /*TODO /lv change to proper color, currently only a marker*/
-    /*background-color: teal;*/
-  }
-  div.about {
-    /*TODO /lv change to proper color, currently only a marker*/
-    /*background-color: teal;*/
-  }
-  div#contact {
-    /*TODO /lv change to proper color, currently only a marker*/
-    /*background-color: teal;*/
-  }
+
 }
 
