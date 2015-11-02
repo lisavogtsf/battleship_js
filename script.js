@@ -23,10 +23,10 @@ $(document).ready(function () {
 
     // -- grid dimensions, square, equal number of columns and rows
     // TODO add rows
+    var rows = 5;
     // var rows = 10;
-    var rows = 2;
-    var columnHeaders = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-    var rowHeaders = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    // var columnHeaders = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    // var rowHeaders = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
     // -- game state information
     var currentPlayer,
@@ -42,7 +42,7 @@ $(document).ready(function () {
     // -- targets "ships"
     var targetType = "ship";
     var targetLengths = [2, 3, 3, 4, 5];
-    var targetsInGame = 1;
+    var targetsInGame = 2;
     // TODO add more targets
 
     // -- player info, player class
@@ -56,26 +56,70 @@ $(document).ready(function () {
         this.targets = [];
         this.targetsRemaining = targetsInGame;
     }
+    // add proper number/length of targets
+    // TODO plus positioning
     Player.prototype.addTargets = function () {
+        var newTarget;
         for (var i = 0; i < targetsInGame; i ++) {
             var currentTargetLength = targetLengths[i];
-            // TODO make this for real, another for loop to add cells
-            // plus positioning
-            var newTarget = {
+            newTarget = {
                 id: i,
                 status: '',
-                cells: [{coords: 'B1', status: ''}, {coords: 'B2', status: ''}]
+                cells: []
             };
+            var newCell;
+            for (var j = 0; j < currentTargetLength; j++) {
+                newCell = {
+                    coords: '',
+                    status: ''
+                };   
+                newTarget.cells.push(newCell);
+            }
             this.targets.push(newTarget);
         }
+    };
+    Player.prototype.positionTargets = function () {
+
+        // for each target
+        // get random x starting point
+        // get random y starting point
+        // random coin flip for orientation, right or down
+        // use those to find a placement
+        // will you go off the board? try again
+        // figure out the coords that correspond to each cell of target
+        // compare each coord with a basic array of used coord strings
+        // if coord already taken try gain
+        // maybe do this in a while loop until say 'target placed'
+
+        // easy static setup, 2 targets
+
+        this.targets[0].cells = [
+            {
+                coords: 'A' + (2),
+            },
+            {
+                coords: 'A' + (3),
+            }
+        ];
+
+        this.targets[1].cells = [
+            {
+                coords: 'B' + (1),
+            },
+            {
+                coords: 'C' + (1),
+            },
+            {
+                coords: 'D' + (1),
+            }            
+        ];
+        
     };
     Player.prototype.seekTarget = function (coords) {
         prevMove = '';
         prevTargetId = null;
         this.targets.forEach(function (target) {
             target.cells.forEach(function(cell) {
-                // console.log("coords, cell.coords", coords, cell.coords);
-                // console.log("coords == cell.coords", coords == cell.coords);
                 // could do error checking for row/col in bounds
                 // for cell status being empty
                 if (coords == cell.coords) {
@@ -181,12 +225,39 @@ $(document).ready(function () {
         // create two players, set their targets
         firstPlayer = new Player(1);
         firstPlayer.addTargets();
+        firstPlayer.positionTargets();
         firstPlayer.playerTitle = 'Player One';
         firstPlayer.playerClass = '.playerOne';
+
+        // show targets on secret board
+        var coords;
+        var domSearchString = '';
+        firstPlayer.targets.forEach(function (target) {
+            target.cells.forEach(function (cell){
+                console.log("cell", cell);
+                coords = cell.coords;
+                console.log("coords, cell.coords", coords, cell.coords);
+                domSearchString = ".playerOne .secretGrid ." + cell.coords;
+                console.log("domSearchString", domSearchString);
+                $(domSearchString).addClass("target");
+                // $(rivalPlayer.playerClass + " .secretGrid ." + coords).addClass(result);
+                // $(firstPlayer.playerClass + " ." + coords).addClass("target");
+            });
+        });
+
         secondPlayer = new Player(2);
         secondPlayer.addTargets();
+        secondPlayer.positionTargets();
         secondPlayer.playerTitle = 'Player Two';
         secondPlayer.playerClass = '.playerTwo';
+
+        // // show targets on secret board
+        // secondPlayer.targets.forEach(function (target) {
+        //     target.cells.forEach(function (cell){
+        //         coords = cell.coords;
+        //         $(secondPlayer.playerClass + " ." + coords).addClass("target");
+        //     });
+        // });        
 
         // make cells listen for clicks, pass on coordinate
         $(".rivalGrid .cell").click(function(){
@@ -198,9 +269,11 @@ $(document).ready(function () {
         allTargetsComplete = false;
         currentPlayer = firstPlayer;
         rivalPlayer = secondPlayer;
+console.log("firstPlayer", firstPlayer);
+console.log("secondPlayer", secondPlayer);
 
         // show next screen, Ready Player One
-        stateShifter("readyPlayerOne", gameOver);
+        stateShifter("readyPlayerOne");
     }
 
 
