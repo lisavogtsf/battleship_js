@@ -3,15 +3,14 @@
 /**
  * List of game functions:
  * setOpening ()
- * feedback (state, gameOver)
  * init ()
+ * stateShifter (state, gameOver)
  * startActiveTurn()
- * reset ()
+ * processTargetSelection () 
  *
  * event handlers:
- * startGameButton.onclick
- * feedbackButton.onclick
- * processTargetSelection () 
+ * $(".startGameButton").click
+ * reset ()
  */
 
 
@@ -42,7 +41,7 @@ $(document).ready(function () {
 
     // -- players
     var numberOfPlayers = 2;
-    var playerTitles = ['Player 1', 'Player 2'];
+    var playerTitles = ['Player One', 'Player Two'];
     var playerClasses = ['.playerOne', '.playerTwo'];
 
     // -- grids, declare them
@@ -59,9 +58,10 @@ $(document).ready(function () {
 
     // -- game state information
     var currentPlayer,
+        rivalPlayer,
         activeGame,
-        lastMove,
-        lastTargetComplete,
+        prevMove,
+        prevTargetComplete,
         allTargetsComplete,
         gameOver,
         winner;
@@ -73,23 +73,21 @@ $(document).ready(function () {
         FIRST_TURN_MSG: "Ready Player One",
         READY_BUTTON: "Ready!",
         START_ANOTHER_GAME: "Thank you for playing! Want to play again?",
-        NEXT_TURN_MSG: "Now, get ready for your turn",
+        NEXT_TURN_MSG: "Get ready for your turn, ",
         ON_TARGET: "Hit!",
         OFF_TARGET: "Miss!",
         GAME_OVER_TOP: "Congratulations to the Winner!",
         GAME_OVER_MSG: " Won the Game!",
         RESTART_BUTTON: "Restart",
-        SELECT_TARGET: "Select your target by clicking on that cell",
+        SELECT_TARGET: "Select your target by clicking on active board",
         SELECT_TARGET_BUTTON: "Select",
+        START_GAME: "Start!",
+        WELCOME: "Welcome, start a new game:",
+        TARGET_COMPLETE: "That hit sank a ship!",
+        GAME_IN_PROGRESS: "Game in progress",
+        ERROR_DRAW: "DRAW: Game over but nobody won! (ERROR)"
     };
 
-    var topMessage = strings.SANK_BATTLESHIP;
-    var feedbackMessage;
-    var feedbackButtonMessage;
-
-    // -- buttons
-    var startGameButton = document.getElementById('startGame');
-    var feedbackButton = document.getElementById('feedback');
 
     /**
      * Set up the game at the very beginning
@@ -105,82 +103,33 @@ $(document).ready(function () {
         // -- set opening text
         $("title").text(strings.GAME_NAME);
         $("#headline").text(strings.GAME_NAME);
+        $("#slogan").text(strings.SANK_BATTLESHIP);
+        $("#feedbackMessage").text(strings.WELCOME);
+
+        // -- set button text and class
+        $("button#continue").text(strings.START_GAME);
+        $("button#continue").addClass("startGameButton");
 
         // -- show proper sections
-        $("#startScreen").show();
-        $("#feedbackScreen").hide();
-        $("#activeScreen").hide();
+        $("header").show();
+        $("section#messages").show();
+        $("section#playerInput").show();
         $("footer").show();
+
+        // -- proper color
+        $("body").removeClass();
 
         // -- show proper boards
         $("#gameStage").hide();
-        $(playerClasses[0]).hide();
-        $(playerClasses[1]).hide();
+
+        // -- set listener on initial button
+        $(".startGameButton").click(function () {
+            console.log("--startGameButton");
+            event.preventDefault();
+            init();
+        });
     }
     setOpening();
-
-
-    /**
-     * Sets up 'Feedback' or 'Privacy' screen before turn
-     * readyPlayerOne, PlayerTurn, GameOver
-     * @param {string} state - current feedback state
-     * @param {bool} gameOver - gameover state
-     */
-
-    function feedback (state, gameOver) {
-        console.log("--feedback, state:", state);
-
-        // process previous move if there was one
-        // check if game is over
-        //********** NEED TO REACT TO LASTMOVE, LAST TARGET COMPLETE, ALL TARGETS COMPLETE
-
-        // get text field variables
-        var $headline = $("#headline");
-        var $topMessage = $(".topMessage");
-        var $feedbackMessage = $("h3.feedbackMessage");
-        var $feedbackButtonMessage = $("button.feedbackButtonMessage");
-        
-        // set up message text according to state
-        if (state === "readyPlayerOne") {
-            topMessage = strings.NEXT_TURN_MSG;
-            feedbackMessage = strings.FIRST_TURN_MSG;
-            feedbackButtonMessage = strings.READY_BUTTON;
-        }
-
-        // report results and prepare to move on
-        if (state === "nextPlayer") {
-            topMessage = strings.SANK_BATTLESHIP;
-            if (lastMove === "hit") {
-                feedbackMessage = strings.ON_TARGET;
-            } else if (lastMove === "miss") {
-                feedbackMessage = strings.OFF_TARGET;
-            }
-            feedbackButtonMessage = strings.READY_BUTTON;            
-        }
-
-        // set up messages for gameover
-        if (state === "gameover") {
-            topMessage = strings.GAME_OVER_TOP;
-            if (winner && winner == playerTitles[0]) {
-                feedbackMessage = playerTitles[0] + strings.GAME_OVER_MSG;
-            }
-            if (winner && winner == playerTitles[1]) {
-                feedbackMessage = playerTitles[1] + strings.GAME_OVER_MSG;
-            }
-            feedbackButtonMessage = strings.RESTART_BUTTON;
-        }
-
-        // set text
-        $topMessage.text(topMessage);        
-        $feedbackMessage.text(feedbackMessage);        
-        $feedbackButtonMessage.text(feedbackButtonMessage);        
-
-        // hide start screen & active turn
-        // display feedback screen
-        $("#startScreen").hide();
-        $("#activeScreen").hide();
-        $("#feedbackScreen").show();
-    }
 
     /**
      * Starts a new game from the start page
@@ -191,6 +140,7 @@ $(document).ready(function () {
         // game is no longer over, has begun
         gameOver = false;
         currentPlayer = 0;
+        rivalPlayer = 1;
 
         // each player gets a set of targets 
 
@@ -202,83 +152,158 @@ $(document).ready(function () {
             processTargetSelection(this, this.className[0], this.className[1]);
         });
 
-        // set targets
+        // set target locations and save
         // TODO make random
-        for (var i = 0; i < numberOfPlayers; i++) {
-            if (i === 0) {
-
-            }
-        }
 
         // show next screen, Ready Player One
-        feedback("readyPlayerOne", gameOver);
-    }
-
-    /**
-     * start one or the other player's turn
-     */
-    function startActiveTurn () {
-
-        // -- update messages
-        $('.topMessage').text(strings.SANK_BATTLESHIP);        
-        $('.currentInstructions').text(strings.SELECT_TARGET);        
-        $('.feedbackButtonMessage').text(strings.SELECT_TARGET_BUTTON);
-        $('.currentPlayer').text(playerTitles[currentPlayer]);
-
-        // hide feedback screen, start for good measure
-        // -- show active screens
-        $("#startScreen").hide();
-        $("#feedbackScreen").hide();
-        $("#activeScreen").show();
-        $("#gameStage").show();
-
-        // -- show active boards
-        $(playerClasses[currentPlayer]).show();
-        $(playerClasses[!currentPlayer]).hide();
-
-        // wait on user click
-    }
-
-    /**
-     * Returns you to the start page from game over
-     */
-    function reset () {
-        console.log("resetting game --reset");
-        setOpening();
-        $(".topMessage").text(strings.START_ANOTHER_GAME);
+        stateShifter("readyPlayerOne", gameOver);
     }
 
 
-    /** Handle input from user, buttons, clicks **/
 
     /**
-     * Begin game actions from startScreen
-     * @param {event} - click event
+     * Shifts between states
+     * readyPlayerOne, PlayerTurn, GameOver
+     * @param {string} state - current feedback state
      */
-    startGameButton.onclick = function (event) {
-        console.log("--startGameButton, event", event);
-        event.preventDefault();
-        init();
-    };
 
-    /**
-     * Get out of feedback/privacy screen
-     * display start screen or active turn screen
-     * @param {event} - click event
-     */
-    feedbackButton.onclick = function (event) {
-        console.log("--feedbackButton, event:", event);
-        event.preventDefault();
+    function stateShifter (state) {
+        console.log("--stateShifter, state:", state);
 
-        // time to go back to the start
-        if (gameOver) {
-            // was just showing the game over screen
-            console.log("in feedbackButton detecting game over, gameOver: ", gameOver);
-            reset();
+        //********** NEED TO REACT TO prevMOVE, LAST TARGET COMPLETE, ALL TARGETS COMPLETE
+
+        // -- remove button class and text
+        var $continueButton = $("button#continue");
+        $continueButton.removeClass();
+        $continueButton.text('');
+        $continueButton.unbind();
+
+        // -- get text field elements
+        // var $headline = $("#headline");
+        var $slogan = $("#slogan");
+        var $feedbackMessage = $("#feedbackMessage");
+        var $currentPlayerName = $("#currentPlayerName");
+        var $currentInstructions = $("#currentInstructions");
+        // var $feedbackButton = $("button.feedbackButton");
+        
+        // -- set up empty variabls to be used by various states
+        // -- get current text if present
+        var continueButtonClass = '';
+        var continueButtonText = '';
+        // var headlineText = $headline.text();
+        var sloganText = $slogan.text();
+        var feedbackMessage = $feedbackMessage.text();
+        var currentInstructions = $currentInstructions.text();
+        var currentPlayerName = playerTitles[currentPlayer] + " " + currentPlayer;
+        
+        // set up message text according to state
+        // -- ready player one
+        if (state === "readyPlayerOne") {
+            // currentInstructions = strings.NEXT_TURN_MSG;
+            sloganText = strings.GAME_IN_PROGRESS;
+            feedbackMessage = strings.FIRST_TURN_MSG;
+            continueButtonText = strings.READY_BUTTON;
+            continueButtonClass = "startTurnButton";
+
+            // change color
+            $("body").addClass("contrast");
+
+            // show no boards but show stage
+            $(playerClasses[currentPlayer]).hide();
+            $(playerClasses[rivalPlayer]).hide();
+            $("#gameStage").show();
         }
-        // time to continue the game!
-        startActiveTurn();
-    };
+
+        // -- nextPlayer, report results and prepare to move on
+        if (state === "nextPlayer") {
+            
+            // show/hide boards
+            $(playerClasses[currentPlayer]).hide();          
+            $(playerClasses[rivalPlayer]).hide();            
+
+            currentInstructions = strings.NEXT_TURN_MSG + playerTitles[currentPlayer];
+            continueButtonClass = "startTurnButton";
+
+            if (prevMove === "hit") {
+                feedbackMessage = strings.ON_TARGET;
+                if (prevTargetComplete === "true") {
+                    feedbackMessage = strings.TARGET_COMPLETE;
+                }
+            } else if (prevMove === "miss") {
+                feedbackMessage = strings.OFF_TARGET;
+            }
+            continueButtonText = strings.READY_BUTTON;            
+
+            // change color
+            $("body").addClass("contrast");
+
+        }
+
+        if (state === "activeTurn") {
+            currentInstructions = strings.SELECT_TARGET + ", " + playerTitles[currentPlayer];
+            feedbackMessage = '';
+
+            continueButtonClass = "hide";
+
+            // return orig color
+            $("body").removeClass();
+
+            // hide rival player's boards
+            $(playerClasses[rivalPlayer]).hide();
+            // show current player boards
+            $(playerClasses[currentPlayer]).show();
+        }
+
+        // set up messages for gameover
+        if (state === "gameover") {
+            // currentInstructions = strings.GAME_OVER_TOP;
+
+            if (winner && winner == playerTitles[0]) {
+                feedbackMessage = playerTitles[0] + strings.GAME_OVER_MSG;
+            } else if (winner && winner == playerTitles[1]) {
+                feedbackMessage = playerTitles[1] + strings.GAME_OVER_MSG;
+            } else {
+                feedbackMessage = scripts.ERROR_DRAW;
+            }
+            continueButtonText = strings.RESTART_BUTTON;
+            continueButtonClass = "restartButton";
+
+            // change color
+            $("body").addClass("contrast");
+
+            // hide boards
+            $(playerClasses[currentPlayer]).hide();
+            $(playerClasses[rivalPlayer]).hide();
+        }
+
+        // -- set button class/text
+        $continueButton.addClass(continueButtonClass);
+        $continueButton.text(continueButtonText)
+
+        // -- set messages
+        // $headline.text(headlineText);
+        $slogan.text(sloganText);
+        $feedbackMessage.text(feedbackMessage);
+        $currentPlayerName.text(currentPlayerName);
+        $currentInstructions.text(currentInstructions);           
+
+        // -- bind click events to newly renamed button
+        // go from interstitial to active turn 
+        $(".startTurnButton").click(function(){
+            console.log("--startTurnButton");
+            event.preventDefault();
+            
+            stateShifter("activeTurn");
+        });
+        // go from gameover to restart
+        $(".restartButton").click(function(){
+            console.log("--restartButton");
+            event.preventDefault();
+            
+            reset();
+        });        
+    }
+
 
     /**
      * Make selection on active game screen
@@ -292,7 +317,7 @@ $(document).ready(function () {
         console.log("--processTargetSelection");
         console.log("element, col, row", element, col, row);
 
-        var results; 
+        var state; 
         // TODO error handling to ensure we're inbounds
 
         // Is it a hit or a miss?
@@ -302,44 +327,56 @@ $(document).ready(function () {
             // -- if a target is at that col/row, 
             // mark as hit on target
             // add class 'hit' to cell
-            // set lastMove variable to 'hit'
+            // set prevMove variable to 'hit'
             // -- check whether this completes the target 'sinks it'
                 // --if completes
-                // set lastTargetComplete variable to 'true'
+                // set prevTargetComplete variable to 'true'
                 // -- allTargetsComplete? 'sunk'
                     // -- if yes set allTargetsComplete to true
                     // -- else set allTargetsComplete to false
 
                 // -- if doesn't complete
-                // set lastTargetComplete variable to 'false'
+                // set prevTargetComplete variable to 'false'
 
             // -- if it is a miss
             // add class 'miss' to cell
-            // set lastMove variable to 'miss'
-            // set lastTargetComplete variable to 'false'
+            // set prevMove variable to 'miss'
+            // set prevTargetComplete variable to 'false'
 
-        // -- pass lastMove, lastTargetComplete, allTargetsComplete variables to 'feedback'
+        // -- pass prevMove, prevTargetComplete, allTargetsComplete variables to 'feedback'
         // don't really pass them, but that idea
         
         // process turn and deliver that info to feedback
         // check/set gameOver
         // check/set hit/miss
+        
         // advance whose turn it is
+
         // TODO remove, for testing
-        lastMove = "hit";
+        prevMove = "hit";
 
         if (gameOver) {
-            results = "gameover";
+            state = "gameover";
         } else {
             // advance turn
-            currentPlayer = players
-            results = "nextPlayer"
+            currentPlayer = currentPlayer ? 0 : 1;
+            rivalPlayer = currentPlayer ? 0 : 1;
+            state = "nextPlayer"
         }
 
-        // feedback(results);
+        stateShifter(state);
 
-        console.log("display other player's privacy before turn, or game over");
     }
+
+    /**
+     * Returns you to the start page from game over
+     */
+    function reset () {
+        console.log("resetting game --reset");
+        // TODO reset but have leaderboard etc
+        setOpening();
+    }
+
 
 
 });

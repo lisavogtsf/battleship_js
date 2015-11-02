@@ -7,7 +7,11 @@ body {
   margin: 0 auto;
   height: 100%;
 }
-/* center everything -- overriding baked-in style of semantic tags */
+body.contrast {
+  background-color: teal;
+  color: white;
+}
+/* overriding baked-in style of semantic tags */
 /* site-wide text settings */
 h1,
 h2,
@@ -17,13 +21,22 @@ a {
   margin: 0 auto;
   color: teal;
 }
+.contrast h1,
+.contrast h2,
+.contrast h3,
+.contrast h4,
+.contrast a {
+  color: white;
+}
 /* make all sections full width, centered */
 header,
 footer,
-#mainScreen,
 section {
   margin: 0 auto;
   width: 100%;
+}
+.hide {
+  display: none;
 }
 /* Setting up the screen */
 header {
@@ -39,116 +52,83 @@ header h2 {
 }
 footer {
   height: 10%;
-  padding: 20px 0;
+  padding: 5px 0;
 }
 footer h5 {
   font-size: .9em;
+  margin: .5em auto;
 }
-button,
-input.targetButton {
+button {
+  background-color: white;
+  color: teal;
   border-radius: 10px;
   padding: 5px;
-  background-color: white;
+  margin: 5px 0;
 }
 :focus {
   outline: thin dotted;
 }
-/* Styling of main screen area */
-#mainScreen {
-  height: 80%;
-}
-section.screen {
-  height: 100%;
-  min-height: 100px;
-}
-section.screen.hide {
-  display: none;
-}
-section.screen.show {
-  display: inline-block;
-}
 h3 {
   padding: 20px 0;
 }
-button {
-  margin: 5px 0;
-}
-/* Opening/Start Screen */
-#startScreen {
-  background-color: white;
-}
-/* Privacy/feedback Screen */
-#feedbackScreen {
-  background-color: teal;
-}
-#feedbackScreen h1,
-#feedbackScreen h2,
-#feedbackScreen h3,
-#feedbackScreen h4 {
-  color: white;
-}
-/* Active Game Screen */
-#activeScreen {
-  background-color: white;
-}
 /* Game Grid Style, can appear on active or feedback */
-section#gameStage .gameGrid {
+.gameGrid {
   display: inline-block;
   text-align: center;
   vertical-align: middle;
   color: white;
 }
-section#gameStage .gameGrid ul {
+.gameGrid ul {
   margin-top: 0;
 }
-section#gameStage .gameGrid li {
+.gameGrid li {
   display: inline-block;
   float: left;
   border: white dotted 2px;
   background-color: teal;
 }
-section#gameStage .gameGrid li.cell:focus,
-section#gameStage .gameGrid li.cell:active {
+.gameGrid li.cell:focus,
+.gameGrid li.cell:active {
   outline: thin dotted;
 }
-section#gameStage .gameGrid li.hit {
+.gameGrid li.hit {
   content: 'X';
   background-color: darkred;
 }
-section#gameStage .gameGrid li.miss {
+.gameGrid li.miss {
   content: '0';
   background-color: gray;
 }
-section#gameStage .gameGrid.secretGrid {
+.gameGrid.secretGrid {
   font-size: 1.5em;
   line-height: 2em;
 }
-section#gameStage .gameGrid.secretGrid li {
+.gameGrid.secretGrid li {
   height: 48px;
   width: 48px;
 }
-section#gameStage .gameGrid.secretGrid li.heading {
+.gameGrid.secretGrid li.heading {
   background-color: darkslategrey;
 }
-section#gameStage .gameGrid.rivalGrid {
+.gameGrid.rivalGrid {
   font-size: 2.5em;
 }
-section#gameStage .gameGrid.rivalGrid h3 {
+.gameGrid.rivalGrid h3 {
   line-height: 1em;
 }
-section#gameStage .gameGrid.rivalGrid li {
+.gameGrid.rivalGrid li {
   line-height: 2.5em;
   height: 98px;
   width: 98px;
 }
-section#gameStage .gameGrid.rivalGrid li.heading {
+.gameGrid.rivalGrid li.heading {
   background-color: slateblue;
 }
-section#gameStage .gameGrid.rivalGrid li.cell {
+.gameGrid.rivalGrid li.cell {
   cursor: pointer;
 }
-section#gameStage .gameGrid.rivalGrid li.cell.hit,
-section#gameStage .gameGrid.rivalGrid li.cell.miss {
+.gameGrid.rivalGrid li.cell.hit,
+.gameGrid.rivalGrid li.cell.miss {
   pointer-events: none;
 }
 /* for somewhat smaller screens, not quite mobile phone */

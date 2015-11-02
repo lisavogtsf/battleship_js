@@ -16,120 +16,109 @@
 
   <header role="banner">
       <h1 id="headline"></h1>
-      <h2 class="topMessage">"You sank my battleship!"</h2>
+      <h2 id="slogan">"You sank my battleship!"</h2>
   </header>
 
-  <div id="mainScreen" role="main">
-    <!-- Start Screen -->
-    <section id="startScreen" class="screen">
-      <h3>Start a new game?</h3>
-      <button id="startGame" tabindex="0">Start!</button>
-    </section>
+  <section id="messages">
+    <h3 id="feedbackMessage"></h3>
+    <h4 id="currentPlayerName"></h4>
+    <h4 id="currentInstructions"></h4>
+  </section>
 
-    <!-- Feedback/Privacy Screen -->
-    <section id="feedbackScreen" class="screen">
-      <h3 class="feedbackMessage"></h3>
-      <button id="feedback" tabindex="0" class="feedbackButtonMessage">Ready!</button>
-    </section>
+  <!-- Game Screen -->
+  <section id="gameStage">
+    <!-- player One boards -->
+    <article class="playerOne gameSpace">
+      <!-- displays own secret board with visible targets & results -->
+      <div class="secretGrid gameGrid">
+        <h3>Player One Secret</h3>
+        <ul>
+          <li class="heading origin"></li>
+          <li class="heading column">A</li>
+          <li class="heading column">B</li>
+        </ul>
+        <ul>
+          <li class="heading row">1</li>
+          <li class="A1 cell"></li>
+          <li class="B1 cell"></li>
+        </ul>
+        <ul>
+          <li class="heading row">2</li>
+          <li class="A2 cell"></li>
+          <li class="B2 cell"></li>
+        </ul>
+      </div>
+      <!-- displays rival board for new target selection -->
+      <div class="rivalGrid gameGrid">
+        <h3>Active</h3>
+        <ul>
+          <li class="heading origin"></li>
+          <li class="heading column">A</li>
+          <li class="heading column">B</li>
+        </ul>
+        <ul>
+          <li class="heading row">1</li>
+          <li class="A1 cell"></li>
+          <li class="B1 cell"></li>
+        </ul>
+        <ul>
+          <li class="heading row">2</li>
+          <li class="A2 cell"></li>
+          <li class="B2 cell"></li>
+        </ul>
+      </div>        
+    </article>
 
-    <!-- Active Turn/Game Screen -->
-    <section id="activeScreen" class="screen">
-        
-      <h4 class="currentPlayer"></h4>
-      <h4 class="currentInstructions"></h4>
-    </section>
+    <!-- player Two boards -->
+    <article class="playerTwo gameSpace">
+      <!-- displays own secret board with visible targets & results -->
+      <div class="secretGrid gameGrid">
+        <h3>Player Two Secret</h3>
+        <ul>
+          <li class="heading origin"></li>
+          <li class="heading column">A</li>
+          <li class="heading column">B</li>
+        </ul>
+        <ul>
+          <li class="heading row">1</li>
+          <li class="A1 cell"></li>
+          <li class="B1 cell"></li>
+        </ul>
+        <ul>
+          <li class="heading row">2</li>
+          <li class="A2 cell"></li>
+          <li class="B2 cell"></li>
+        </ul>
+      </div>
+      <!-- displays rival board for new target selection -->
+      <div class="rivalGrid gameGrid">
+        <h3>Active</h3>
+        <ul>
+          <li class="heading origin"></li>
+          <li class="heading column">A</li>
+          <li class="heading column">B</li>
+        </ul>
+        <ul>
+          <li class="heading row">1</li>
+          <li class="A1 cell"></li>
+          <li class="B1 cell"></li>
+        </ul>
+        <ul>
+          <li class="heading row">2</li>
+          <li class="A2 cell"></li>
+          <li class="B2 cell"></li>
+        </ul>
+      </div>        
+    </article>
 
-    <!-- Game boards -->
-    <section id="gameStage">
-      <!-- player One boards -->
-      <article class="playerOne gameSpace">
-        <!-- displays own secret board with visible targets & results -->
-        <div class="secretGrid gameGrid">
-          <h3>Player One Secret</h3>
-          <ul>
-            <li class="heading origin"></li>
-            <li class="heading column">A</li>
-            <li class="heading column">B</li>
-          </ul>
-          <ul>
-            <li class="heading row">1</li>
-            <li class="A1 cell"></li>
-            <li class="B1 cell"></li>
-          </ul>
-          <ul>
-            <li class="heading row">2</li>
-            <li class="A2 cell"></li>
-            <li class="B2 cell"></li>
-          </ul>
-        </div>
-        <!-- displays rival board for new target selection -->
-        <div class="rivalGrid gameGrid">
-          <h3>Active</h3>
-          <ul>
-            <li class="heading origin"></li>
-            <li class="heading column">A</li>
-            <li class="heading column">B</li>
-          </ul>
-          <ul>
-            <li class="heading row">1</li>
-            <li class="A1 cell"></li>
-            <li class="B1 cell"></li>
-          </ul>
-          <ul>
-            <li class="heading row">2</li>
-            <li class="A2 cell"></li>
-            <li class="B2 cell"></li>
-          </ul>
-        </div>        
-      </article>
+  </section> <!-- end of game stage --> 
 
-      <!-- player Two boards -->
-      <article class="playerTwo gameSpace">
-        <!-- displays own secret board with visible targets & results -->
-        <div class="secretGrid gameGrid">
-          <h3>Player Two Secret</h3>
-          <ul>
-            <li class="heading origin"></li>
-            <li class="heading column">A</li>
-            <li class="heading column">B</li>
-          </ul>
-          <ul>
-            <li class="heading row">1</li>
-            <li class="A1 cell"></li>
-            <li class="B1 cell"></li>
-          </ul>
-          <ul>
-            <li class="heading row">2</li>
-            <li class="A2 cell"></li>
-            <li class="B2 cell"></li>
-          </ul>
-        </div>
-        <!-- displays rival board for new target selection -->
-        <div class="rivalGrid gameGrid">
-          <h3>Active</h3>
-          <ul>
-            <li class="heading origin"></li>
-            <li class="heading column">A</li>
-            <li class="heading column">B</li>
-          </ul>
-          <ul>
-            <li class="heading row">1</li>
-            <li class="A1 cell"></li>
-            <li class="B1 cell"></li>
-          </ul>
-          <ul>
-            <li class="heading row">2</li>
-            <li class="A2 cell"></li>
-            <li class="B2 cell"></li>
-          </ul>
-        </div>        
-      </article>
-
-    </section>  
-  </div>
+  <!-- Button/below game content -->
+  <section id="playerInput">
+    <button id="continue" tabindex="0"></button>
+  </section>
 
   <footer role="contentinfo">
-    <!-- startover option -->
     <h5><a href="https://en.wikipedia.org/wiki/Battleship_(game)">Learn more about Battleship</a></h5>
     <h5><a href="https://github.com/lisavogtsf/">by Lisa Vogt</a></h5><h5><a href="https://github.com/lisavogtsf/battleship_js">battleship_js</a></h5>
   </footer>

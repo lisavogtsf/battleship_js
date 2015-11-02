@@ -11,15 +11,19 @@
 @missText: '0';
 
 body {
-  background-color: white;
+  background-color: @contrastColor;
   color: @mainColor;
   font-family: sans-serif;
   text-align: center;
   margin: 0 auto;
   height: 100%;
+  &.contrast {
+    background-color: @mainColor;
+    color: @contrastColor;
+  }
 }
 
-/* center everything -- overriding baked-in style of semantic tags */
+/* overriding baked-in style of semantic tags */
 
 /* site-wide text settings */
 h1, 
@@ -29,16 +33,21 @@ h4,
 a {
   margin: 0 auto;
   color: @mainColor;
+  .contrast & {
+    color: @contrastColor;
+  }
 }
 
 /* make all sections full width, centered */
-
 header, 
 footer,
-#mainScreen,
 section {
   margin: 0 auto;
   width: 100%;
+}
+
+.hide {
+  display: none;
 }
 
 /* Setting up the screen */
@@ -55,132 +64,96 @@ header {
   }
 }
 
+section#messages {}
+
+section#gameStage {}
+
+section#playerInput {}
+
 footer {
   height: 10%;
-  padding: 20px 0;
+  padding: 5px 0;
   h5 {
     font-size: .9em;
+    margin: .5em auto;
   }
 }
 
-button,
-input.targetButton {
+button {
+  background-color: @contrastColor;
+  color: @mainColor;
   border-radius: @borderRadiusStandard;
   padding: 5px;
-  background-color: @contrastColor;
+  margin: 5px 0;
 }
 
 :focus {
   outline: thin dotted;
 }
 
-/* Styling of main screen area */
-
-#mainScreen {
-  height: 80%;
-}
-
-section.screen {
-  height: 100%;
-  min-height: 100px;
-  &.hide {
-    display: none;
-  }
-  &.show {
-    display: inline-block;
-  }
-}
-
 h3 {
   padding: 20px 0;
 }
-button {
-  margin: 5px 0;
-}
-
-/* Opening/Start Screen */
-#startScreen {
-  background-color: @contrastColor
-}
-
-/* Privacy/feedback Screen */
-#feedbackScreen { 
-  background-color: @mainColor;
-  h1, 
-  h2, 
-  h3,
-  h4 {
-    color: @contrastColor;
-  }
-}
-
-/* Active Game Screen */
-#activeScreen {
-  background-color: @contrastColor;
-}
 
 /* Game Grid Style, can appear on active or feedback */
-section#gameStage {
+.gameGrid {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  color: @contrastColor;
 
-  .gameGrid {
+  ul {
+    margin-top: 0;
+  }
+
+  li {
     display: inline-block;
-    text-align: center;
-    vertical-align: middle;
-    color: @contrastColor;
-
-    ul {
-      margin-top: 0;
+    float: left;
+    border: white dotted 2px;
+    background-color: @mainColor;
+    &.cell:focus,
+    &.cell:active {
+      outline: thin dotted;
     }
+    &.hit {
+      content: @hitText;
+      background-color: @hitColor;
+    }
+    &.miss {
+      content: @missText;
+      background-color: @missColor;
+    }
+  }
 
+  &.secretGrid {
+    font-size: 1.5em;
+    line-height: 2em;
     li {
-      display: inline-block;
-      float: left;
-      border: white dotted 2px;
-      background-color: @mainColor;
-      &.cell:focus,
-      &.cell:active {
-        outline: thin dotted;
+      height: 48px;
+      width: 48px;
+      &.heading {
+        background-color: @secretColor;
       }
-      &.hit {
-        content: @hitText;
-        background-color: @hitColor;
-      }
-      &.miss {
-        content: @missText;
-        background-color: @missColor;
-      }
-    }
+    }  
+  }
 
-    &.secretGrid {
-      font-size: 1.5em;
-      line-height: 2em;
-      li {
-        height: 48px;
-        width: 48px;
-        &.heading {
-          background-color: @secretColor;
-        }
-      }  
+  &.rivalGrid {
+    font-size: 2.5em;
+    h3 {
+      line-height: 1em
     }
-
-    &.rivalGrid {
-      font-size: 2.5em;
-      h3 {
-        line-height: 1em
+    li {
+      line-height: 2.5em;
+      height: 98px;
+      width: 98px;
+      &.heading {
+        background-color: @rivalColor;
       }
-      li {
-        line-height: 2.5em;
-        height: 98px;
-        width: 98px;
-        &.heading {
-          background-color: @rivalColor;
-        }
-        &.cell {
-          cursor: pointer;
-          &.hit,
-          &.miss {
-            pointer-events: none;
-          }
+      &.cell {
+        cursor: pointer;
+        &.hit,
+        &.miss {
+          pointer-events: none;
         }
       }
     }
