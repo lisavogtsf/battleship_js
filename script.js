@@ -42,7 +42,7 @@ $(document).ready(function () {
     // -- targets "ships"
     var targetType = "ship";
     var targetLengths = [2, 3, 3, 4, 5];
-    var targetsInGame = 2;
+    var targetsInGame = 5;
     // TODO add more targets
 
     // -- player info, player class
@@ -113,6 +113,51 @@ $(document).ready(function () {
                     coords: 'D' + (1),
                 }            
             ];
+
+            this.targets[2].cells = [
+                {
+                    coords: 'D' + (4),
+                },
+                {
+                    coords: 'D' + (5),
+                },
+                {
+                    coords: 'D' + (6),
+                }            
+            ];
+
+            this.targets[3].cells = [
+                {
+                    coords: 'G' + (8),
+                },
+                {
+                    coords: 'H' + (8),
+                },
+                {
+                    coords: 'I' + (8),
+                },
+                {
+                    coords: 'J' + (8),
+                }                            
+            ];
+
+            this.targets[4].cells = [
+                {
+                    coords: 'E' + (10),
+                },
+                {
+                    coords: 'F' + (10),
+                },            
+                {
+                    coords: 'G' + (10),
+                },
+                {
+                    coords: 'H' + (10),
+                },
+                {
+                    coords: 'I' + (10),
+                } 
+            ];
         }
         if (this.id === 2) {
             this.targets[0].cells = [
@@ -135,6 +180,51 @@ $(document).ready(function () {
                     coords: 'E' + (1),
                 },                
             ];
+
+            this.targets[2].cells = [
+                {
+                    coords: 'D' + (7),
+                },
+                {
+                    coords: 'D' + (8),
+                },
+                {
+                    coords: 'D' + (9),
+                }            
+            ];
+
+            this.targets[3].cells = [
+                {
+                    coords: 'G' + (1),
+                },
+                {
+                    coords: 'H' + (1),
+                },
+                {
+                    coords: 'I' + (1),
+                },
+                {
+                    coords: 'J' + (1),
+                }                            
+            ];
+
+            this.targets[4].cells = [
+                {
+                    coords: 'E' + (5),
+                },
+                {
+                    coords: 'F' + (5),
+                },            
+                {
+                    coords: 'G' + (5),
+                },
+                {
+                    coords: 'H' + (5),
+                },
+                {
+                    coords: 'I' + (5),
+                } 
+            ];            
         }
         
     };
