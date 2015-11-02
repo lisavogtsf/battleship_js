@@ -1,10 +1,11 @@
-# battleship_js
-an implementation of battleship in HTML/CSS/JS
+# [battleship_js](http://lisavogtsf.github.io/battleship_js/ "battleship_js")
+
+an implementation of [the game of Battleship](https://en.wikipedia.org/wiki/Battleship_\(game\)) in HTML/CSS/JS, hosted on github pages
 
 # Test Mode
 
 * game screens
-	* start
+ 	* start
 	* privacy/feedback
 	* active turn 
 
