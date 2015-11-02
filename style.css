@@ -72,7 +72,7 @@ button {
   margin: 5px 0;
 }
 :focus {
-  outline: thin dotted;
+  outline: thin dotted gray;
 }
 h3 {
   padding: 10px 0;
